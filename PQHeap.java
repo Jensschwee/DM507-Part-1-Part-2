@@ -1,20 +1,24 @@
 import java.lang.Math;
 
 public class PQHeap implements PQ {
-    
+
     private Element[] heap;
     private int heapsize;
 
     /**
      * Creates a new priority queue of a given size
+     *
+     * param maxElms - the maximum number of elements in the heap
      */
     public PQHeap(int maxElms) {
         heapsize = 0;
-        heap = new Element[maxElms];        
-    }   
+        heap = new Element[maxElms];
+    }
 
     /**
-     *  Inserts the Element e into the heap
+     * Inserts the Element e into the heap
+     *
+     * param e - the element to be inserted
      */
     @Override
     public void insert(Element e) {
@@ -24,8 +28,8 @@ public class PQHeap implements PQ {
     }
 
     /**
-     *  Removes and returns the Element in the heap
-     *  with the lowest key.
+     * Removes and returns the Element in the heap
+     * with the lowest key.
      */
     @Override
     public Element extractMin() {
@@ -39,11 +43,14 @@ public class PQHeap implements PQ {
     }
 
     /**
-     *  Decreases the value of the element at i's key to k.
+     * Moves an element to it's correct location
+     * based on minheap (recursive)
+     *
+     * param i - the index of the element
      */
     private void decreaseKey(int i) {
-        Element swap;       
-        
+        Element swap;
+
         if (i != 0) {
             if (heap[parent(i)].key > heap[i].key) {
                 swap = heap[i];
@@ -54,8 +61,14 @@ public class PQHeap implements PQ {
         }
     }
 
+    /**
+     * heapifies the element with index i in order
+     * to reorganize the heap as a min-heap
+     *
+     * param i - index of the element to heapify
+     */
     private void minheapify(int i) {
-        int smallest;       
+        int smallest;
         int left = left(i);
         int right = right(i);
         Element swap;
@@ -72,20 +85,28 @@ public class PQHeap implements PQ {
             heap[smallest] = swap;
             minheapify(smallest);
         }
-
-        
     }
-    
+
+    /**
+     * Finds the parent index of i
+     */
     private int parent(int i) { return (int) Math.floor(i/2); }
+
+    /**
+     * Finds the left index of i
+     */
     private int left(int i) { return i*2; }
+
+    /**
+     * Finds the right index of i
+     */
     private int right(int i) { return (i*2)+1; }
 
     @Override
     public String toString() {
         String out = "Key | Data \n";
         for(Element e : heap)
-            out += "" + e.key + " | " + e.data + "\n";          
-        
+            out += "" + e.key + " | " + e.data + "\n";
         return out;
     }
 }
