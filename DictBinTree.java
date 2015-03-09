@@ -1,14 +1,14 @@
 public class DictBinTree implements Dict {
-	
+    
     public Node root;
     public int size, height;
 
     public DictBinTree() {
         root = new Node(0);
-	}
+    }
 
-	@Override
-	public void insert(int k) {
+    @Override
+    public void insert(int k) {
         Node y = null;
         Node x = root;
         while (x != null) {
@@ -24,17 +24,17 @@ public class DictBinTree implements Dict {
             y.left = new Node(k);
         else
             y.right = new Node(k);        
-	}
+    }
 
     @Override
     public int[] orderedTraversal() {
-    	return null;
+        return null;
     }
 
     @Override
     public boolean search(int k) {
         Node x = root;
-    	while (x == null && k != x.key) {
+        while (x == null && k != x.key) {
             if (k < x.key)
                 x = x.left;
             else
@@ -54,5 +54,5 @@ public class DictBinTree implements Dict {
             right = null;
         }
     }
-	
+    
 }
