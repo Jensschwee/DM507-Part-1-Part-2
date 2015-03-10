@@ -16,6 +16,9 @@ public class Treesort {
             dict.insert(numb);
         }
 
-        System.out.println(dict.orderedTraversal());
+        for (int  number: dict.orderedTraversal())
+        {
+            System.out.println(number);
+        }
     }
 }

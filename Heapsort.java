@@ -14,7 +14,7 @@ public class Heapsort {
             n.add(sc.nextInt());
         }
 
-        PQ pq = new PQHeap(n.size() - 1);
+        PQ pq = new PQHeap(n.size());
         for (int numb : n) {
             pq.insert(new Element(numb, numb));
         }
