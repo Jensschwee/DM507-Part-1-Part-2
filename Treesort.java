@@ -1,10 +1,11 @@
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Treesort {
     public static void main(String[] args) {
 
-        LinkedList<Integer> n = new LinkedList<Integer>();
+        List<Integer> n = new ArrayList<Integer>();
         Scanner sc = new Scanner(System.in);
         while (sc.hasNextInt()) {
             n.add(sc.nextInt());

@@ -2,37 +2,42 @@
 public class DictBinTree implements Dict {
 
     public Node root;
-    public int size = 1, height = 1;
+    public int size = 0, height = 0;
 
     public DictBinTree() {
-        root = new Node(0);
     }
 
     @Override
     public void insert(int k) {
-        Node y = null;
-        Node x = root;
-        int tempHeight = 1;
-        while (x != null) {
-            y = x;
-            if (k < x.key) {
-                x = x.left;
-            } else {
-                x = x.right;
+        if (size != 0) {
+            Node y = null;
+            Node x = root;
+            int tempHeight = 1;
+            while (x != null) {
+                y = x;
+                if (k < x.key) {
+                    x = x.left;
+                } else {
+                    x = x.right;
+                }
+                tempHeight++;
             }
-            tempHeight++;
-        }
-        if (y == null) {
-            root.key = k;
-        } else if (k < y.key) {
-            y.left = new Node(k);
+            if (y == null) {
+                root.key = k;
+            } else if (k < y.key) {
+                y.left = new Node(k);
+            } else {
+                y.right = new Node(k);
+            }
+            if (height < ++tempHeight) {
+                height = tempHeight;
+            }
         } else {
-            y.right = new Node(k);
-        }
-        if (height < ++tempHeight) {
-            height = tempHeight;
+            root = new Node(k);
+            height = 1;
         }
         size++;
+
     }
 
     public Node treeMinimum() {
@@ -55,11 +60,12 @@ public class DictBinTree implements Dict {
     public int[] orderedTraversal() {
         outOrder = new int[size];
         inorderTreeWalk(root);
+
         return outOrder;
     }
 
     int[] outOrder;
-    int counter =0;
+    int counter = 0;
 
     public int[] inorderTreeWalk(Node x) {
         if (x != null) {
@@ -72,17 +78,21 @@ public class DictBinTree implements Dict {
 
     public boolean search(int k) {
         Node x = root;
-        while (x == null && k != x.key) {
+        while (x != null && k != x.key) {
             if (k < x.key) {
                 x = x.left;
             } else {
                 x = x.right;
             }
         }
-        if (x.key == k) {
+
+        if (x == null) {
+            return false;
+        } else if (x.key == k) {
             return true;
         }
         return false;
+
     }
 
     protected class Node {
