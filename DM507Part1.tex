@@ -45,10 +45,38 @@ Institut for Matematik og Datalogi Syddansk Universitet, Odense\\
 \bigskip
 8. April 2015\\
 \bigskip
-Af Jesph13 og Jenss12\\
+Af Jesper Wohlert Hansen \& Jens Hjort Schwee\\
 }
 \newpage
+
+\section*{Introduktion}
+Denne rapport dækker over implementationer af datastukturerne \texttt{Priority Queue} og \texttt{Binary Tree} ved brug af hhv. en \texttt{Heap} og en \texttt{Dictionary} samt tilhørende algoritmer til behandling af disse strukturer. Disse implementationer er skrevet i Java og implementerer følgende interfaces:
+
+\begin{verbatim}
+public interface PQ {
+    public Element extractMin();
+    public void insert(Element e);
+}
+\end{verbatim}
+
+
+\begin{verbatim}
+public interface Dict {
+    public void insert(int k);
+    public int[] orderedTraversal();
+    public boolean search(int k);
+}
+\end{verbatim}
+
+De konkrete implementationer er baseret på pseudokode fra bogen \emph{Introduction to Algorithms, third edition}\footnote{http://mitpress.mit.edu/books/introduction-algorithms}.
+
+
+Rapporten indeholder uddybende beskrivelser af de implementerede datastrukturer med tilhørende kodestumper. De mest trivielle kodestumper er undladt til fordel for korthed.
+
+\newpage
+
 \section*{Opgave 1}
+
 Indsæt beskrivelse
 \begin{lstlisting}
 	/**
@@ -63,9 +91,7 @@ Indsæt beskrivelse
         heapsize--;
         minheapify(0);
         return min;
-    }
-    
-    
+    }    
 \end{lstlisting}
 Indsæt beskrivelse
 \begin{lstlisting}
