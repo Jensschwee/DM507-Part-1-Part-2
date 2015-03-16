@@ -139,4 +139,32 @@ Indsæt beskrivelse
 \end{lstlisting}
 \newpage
 \section*{Opgave 3}
+Indsæt beskrivelse
+\begin{lstlisting}
+List<Integer> numbers = new ArrayList<Integer>();
+Scanner scan = new Scanner(System.in);
+while (scan.hasNextInt()) {
+	numbers.add(scan.nextInt());
+}
+
+Dict dict = new DictBinTree();
+
+for (int number : numbers) {
+	dict.insert(number);
+}
+
+for (int number : dict.orderedTraversal()) {
+	System.out.println(number);
+}
+\end{lstlisting}
+\newpage
+\section*{Test}
+Begge datastrukturer er testet på følgende måde:
+\begin{itemize}
+  \item console med indput
+  \item udleveret \texttt{TestProjectPartI} klasse
+\end{itemize}
+\subsection*{Heap}
+
+\subsection*{Tree}
 \end{document}
