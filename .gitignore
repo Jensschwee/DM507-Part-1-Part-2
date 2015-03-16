@@ -74,4 +74,7 @@ nbactions.xml
 nb-configuration.xml
 .nb-gradle/
 
-
+### LaTex ###
+*.aux
+DM507Part1.log
+DM507Part1.synctex.gz
