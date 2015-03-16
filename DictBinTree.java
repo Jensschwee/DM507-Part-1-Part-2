@@ -40,7 +40,7 @@ public class DictBinTree implements Dict {
             } else {
                 y.right = new Node(k);
             }
-            if (height < ++tempHeight) {
+            if (height < tempHeight) {
                 height = tempHeight;
             }
         } else {
