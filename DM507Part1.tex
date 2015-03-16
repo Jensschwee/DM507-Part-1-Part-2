@@ -5,10 +5,33 @@
 \usepackage{amssymb}
 \usepackage{amsfonts}
 \usepackage{bold-extra}
-\usepackage{ textcomp }
+\usepackage{textcomp}
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Java,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
 \pagestyle{fancy}
 \fancyhead[CO,CE]{Projekt del 1 - Jesph13 og Jenss12}
 \begin{document}
@@ -26,8 +49,68 @@ Af Jesph13 og Jenss12\\
 }
 \newpage
 \section*{Opgave 1}
+Indsæt beskrivelse
+\begin{lstlisting}
+	/**
+     * Removes and returns the Element in the heap
+     * with the lowest key.
+     */
+    @Override
+    public Element extractMin() {
+        Element min;
+        min = heap[0];
+        heap[0] = heap[heapsize-1];
+        heapsize--;
+        minheapify(0);
+        return min;
+    }
+    
+    
+\end{lstlisting}
+Indsæt beskrivelse
+\begin{lstlisting}
+	/**
+     * Inserts the Element e into the heap
+     *
+     * param e - the element to be inserted
+     */
+    @Override
+    public void insert(Element e) {
+        heapsize++;
+        heap[heapsize-1] = e;
+        decreaseKey(heapsize-1);
+    }
+\end{lstlisting}
 \newpage
 \section*{Opgave 2}
+Indsæt beskrivelse
+\begin{lstlisting}
+	public boolean search(int k) {
+        Node x = root;
+        while (x != null && k != x.key) {
+            if (k < x.key) {
+                x = x.left;
+            } else {
+                x = x.right;
+            }
+        }
+
+        if (x == null) {
+            return false;
+        } else if (x.key == k) {
+            return true;
+        }
+        return false;
+    }
+\end{lstlisting}
+Indsæt beskrivelse
+\begin{lstlisting}
+	public int[] orderedTraversal() {
+        outOrder = new int[size];
+        inOrderTreeWalk(root);
+        return outOrder;
+    }
+\end{lstlisting}
 \newpage
 \section*{Opgave 3}
 \end{document}
