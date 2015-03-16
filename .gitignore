@@ -111,3 +111,7 @@ nb-configuration.xml
 *.tdo
 
 *.pdf
+
+# Files
+input.txt
+output.txt

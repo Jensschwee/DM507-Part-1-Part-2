@@ -35,7 +35,7 @@
 \pagestyle{fancy}
 \fancyhead[CO,CE]{Projekt del 1 - jesph13 og jenss12}
 \begin{document}
-{\centering 
+{\centering
 \huge
 Projekt del 1\\
 Algoritmer og datastrukturer (DM507)\\
@@ -76,66 +76,97 @@ Rapporten indeholder uddybende beskrivelser af de implementerede datastrukturer 
 \newpage
 
 \section*{Opgave 1}
+Målet med denne opgave er at implementere en prioritetskø der implementerer interfacet \texttt{PQ}. Køen skal have en heap struktur, og skal indeholde og behandle objekter af klassen \texttt{Element}. Vi ønsker at fokusere på interface metoderne, samt private metodekald fra interface-metoderne.
+
+\subsection*{extractMin()}
+
+\begin{lstlisting}
+// PQHeap.java
+@Override
+public Element extractMin() {
+    Element min;
+    min = heap[0];    
+\end{lstlisting}
+For at udtrække det mindste element fra heapen, benytter vi, at vi arbejder med en min-heap. Det vil sige, at vores mindste element altid vil være på plads 0 - \texttt{heap[0]}.
+\begin{lstlisting}    
+    heap[0] = heap[heapsize-1];
+    heapsize--;
+    minheapify(0);
+    return min;
+}
+\end{lstlisting}
+Herefter sætter vi det første element til at have samme værdi, som de sidste og reducerer heapsizen, således at vi kan heapifisere direkte fra første element. Dette fungerer da det største element nu er på roden af en min-heap, og hele heapen derfor skal reorganiseres.
+\begin{lstlisting}
+// PQHeap.java
+private void minheapify(int i) {
+    int smallest;
+    int left = left(i);
+    int right = right(i);
+    Element swap;
+
+    if (left <= heapsize && heap[left].key < heap[i].key)
+        smallest = left;
+    else
+        smallest = i;
+    if (right <= heapsize && heap[right].key < heap[smallest].key)
+        smallest = right;
+    if (smallest != i) {
+        swap = heap[i];
+        heap[i] = heap[smallest];
+        heap[smallest] = swap;
+        minheapify(smallest);
+    }
+}
+\end{lstlisting}
+
 
 Indsæt beskrivelse
 \begin{lstlisting}
-	/**
-     * Removes and returns the Element in the heap
-     * with the lowest key.
-     */
-    @Override
-    public Element extractMin() {
-        Element min;
-        min = heap[0];
-        heap[0] = heap[heapsize-1];
-        heapsize--;
-        minheapify(0);
-        return min;
-    }    
+/**
+ * Inserts the Element e into the heap
+ *
+ * param e - the element to be inserted
+ */
+@Override
+public void insert(Element e) {
+    heapsize++;
+    heap[heapsize-1] = e;
+    decreaseKey(heapsize-1);
+}
 \end{lstlisting}
-Indsæt beskrivelse
-\begin{lstlisting}
-	/**
-     * Inserts the Element e into the heap
-     *
-     * param e - the element to be inserted
-     */
-    @Override
-    public void insert(Element e) {
-        heapsize++;
-        heap[heapsize-1] = e;
-        decreaseKey(heapsize-1);
-    }
-\end{lstlisting}
+
+
 \newpage
+
+
 \section*{Opgave 2}
 Indsæt beskrivelse
 \begin{lstlisting}
-	public boolean search(int k) {
-        Node x = root;
-        while (x != null && k != x.key) {
-            if (k < x.key) {
-                x = x.left;
-            } else {
-                x = x.right;
-            }
+public boolean search(int k) {
+  Node x = root;
+  while (x != null && k != x.key) {
+        if (k < x.key) {
+            x = x.left;
+        } else {
+            x = x.right;
         }
-
-        if (x == null) {
-            return false;
-        } else if (x.key == k) {
-            return true;
-        }
-        return false;
     }
+
+    if (x == null) {
+        return false;
+    } else if (x.key == k) {
+        return true;
+    }
+    return false;
+}
 \end{lstlisting}
 Indsæt beskrivelse
 \begin{lstlisting}
-	public int[] orderedTraversal() {
-        outOrder = new int[size];
-        inOrderTreeWalk(root);
-        return outOrder;
-    }
+public int[] orderedTraversal() {
+    outOrder = new int[size];
+    inOrderTreeWalk(root);
+    return outOrder;
+}
 \end{lstlisting}
 \newpage
 \section*{Opgave 3}
