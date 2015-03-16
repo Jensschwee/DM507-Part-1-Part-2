@@ -1,4 +1,3 @@
-
 public class DictBinTree implements Dict {
 
     protected Node root;
