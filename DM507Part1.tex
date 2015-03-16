@@ -170,22 +170,40 @@ public int[] orderedTraversal() {
 \end{lstlisting}
 \newpage
 \section*{Opgave 3}
-Indsæt beskrivelse
+Koden for hvordan \texttt{Treesort} er implamenteret, den gør brug af datastrukturen \texttt{DictBinTree} som er et binært tree.\\
+Ført læses indputter fra scanneren og gemmens i en arrayliste, herefter ligges disse tal i det binnære træ.\\
+Til slut hentes alle talende ud igen af træ'et i sortede orden.
 \begin{lstlisting}
+//Treesort.java
 List<Integer> numbers = new ArrayList<Integer>();
 Scanner scan = new Scanner(System.in);
 while (scan.hasNextInt()) {
 	numbers.add(scan.nextInt());
 }
-
 Dict dict = new DictBinTree();
-
 for (int number : numbers) {
 	dict.insert(number);
 }
-
 for (int number : dict.orderedTraversal()) {
 	System.out.println(number);
+}
+\end{lstlisting}
+Koden for hvordan \texttt{Heapsort} er implamenteret, den gør brug af datastrukturen \texttt{PQHeap} som er en priotes kø.\\
+Ført læses indputter fra scanneren og gemmens i en arrayliste, herefter ligges disse tal i det kø'en.\\
+Til slut hentes alle talende ud igen af træ'et i sortede orden.
+\begin{lstlisting}
+//Heapsort.java
+List<Integer> numbers = new ArrayList<Integer>();
+Scanner scan = new Scanner(System.in);
+while (scan.hasNextInt()) {
+	numbers.add(scan.nextInt());
+}
+PQ pq = new PQHeap(numbers.size());
+for (int number : numbers) {
+	pq.insert(new Element(number, number));
+}
+for (int number: numbers) {
+	System.out.println(pq.extractMin().key);
 }
 \end{lstlisting}
 \newpage
@@ -193,9 +211,10 @@ for (int number : dict.orderedTraversal()) {
 Begge datastrukturer er testet på følgende måde:
 \begin{itemize}
   \item console med indput
+  \item console med redirection og output file  
   \item udleveret \texttt{TestProjectPartI} klasse
 \end{itemize}
-\subsection*{Heap}
+\bigskip
+Datastrukeren vil virke på alle int's som ligger i int32 der er ikke testet for støre indput end dette. \texttt{Treesort} og \texttt{Heapsort} virker begge med disse indput.
 
-\subsection*{Tree}
 \end{document}
