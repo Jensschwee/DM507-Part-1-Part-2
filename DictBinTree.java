@@ -1,18 +1,30 @@
 
 public class DictBinTree implements Dict {
 
-    public Node root;
-    public int size = 0, height = 0;
+    protected Node root;
+    protected int size, height;
+    protected int[] outOrder;
+    protected int counter = 0;
 
+    /**
+     * Default constructor for DictBinTree
+     */
     public DictBinTree() {
+      size = height = 0;
     }
 
+    /**
+     * Inserts a new value into the dictionary
+     *
+     * param k - integer to insert
+     */
     @Override
     public void insert(int k) {
+      int tempHeight;
         if (size != 0) {
             Node y = null;
             Node x = root;
-            int tempHeight = 1;
+            tempHeight = 1;
             while (x != null) {
                 y = x;
                 if (k < x.key) {
@@ -40,7 +52,12 @@ public class DictBinTree implements Dict {
 
     }
 
-    public Node treeMinimum() {
+    /**
+     * Finds the smallest value in the tree
+     *
+     * returns smallest tree value
+     */
+    protected Node treeMinimum() {
         Node x = root;
         while (x.left != null) {
             x = x.left;
@@ -48,7 +65,12 @@ public class DictBinTree implements Dict {
         return x;
     }
 
-    public Node treeMax() {
+    /**
+     * Finds the largest value in the tree
+     *
+     * returns largest tree value
+     */
+    protected Node treeMax() {
         Node x = root;
         while (x.right != null) {
             x = x.right;
@@ -56,26 +78,40 @@ public class DictBinTree implements Dict {
         return x;
     }
 
+    /**
+     * Creates an ordered copy of the tree's elements
+     *
+     * returns ordered array
+     */
     @Override
     public int[] orderedTraversal() {
         outOrder = new int[size];
-        inorderTreeWalk(root);
+        inOrderTreeWalk(root);
 
         return outOrder;
     }
 
-    int[] outOrder;
-    int counter = 0;
-
-    public int[] inorderTreeWalk(Node x) {
+    /**
+     * Recursive tree walk algorithm used for traversal
+     *
+     * param x - the current node
+     */
+    protected int[] inOrderTreeWalk(Node x) {
         if (x != null) {
-            inorderTreeWalk(x.left);
+            inOrderTreeWalk(x.left);
             outOrder[counter++] = x.key;
-            inorderTreeWalk(x.right);
+            inOrderTreeWalk(x.right);
         }
         return outOrder;
     }
 
+    /**
+     * Searches through the tree to find a value
+     *
+     * param k - the element to be found
+     * returns true if the element is found, false if not
+     */
+    @Override
     public boolean search(int k) {
         Node x = root;
         while (x != null && k != x.key) {
@@ -100,11 +136,15 @@ public class DictBinTree implements Dict {
         public Node left, right;
         public int key;
 
+        /**
+         * Defines a simple Node datastructure
+         *
+         * param key - the value of the node
+         */
         protected Node(int key) {
             this.key = key;
             left = null;
             right = null;
         }
     }
-
 }
