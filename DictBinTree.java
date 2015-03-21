@@ -48,7 +48,6 @@ public class DictBinTree implements Dict {
             height = 1;
         }
         size++;
-
     }
 
     /**
@@ -85,8 +84,8 @@ public class DictBinTree implements Dict {
     @Override
     public int[] orderedTraversal() {
         outOrder = new int[size];
+		counter = 0;
         inOrderTreeWalk(root);
-
         return outOrder;
     }
 

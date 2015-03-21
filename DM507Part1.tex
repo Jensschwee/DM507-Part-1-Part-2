@@ -33,7 +33,7 @@
   tabsize=3
 }
 \pagestyle{fancy}
-\fancyhead[CO,CE]{Projekt del 1 - jesph13 og jenss12}
+\fancyhead[CO,CE]{Projekt del 1 - DM507 - jesph13 og jenss12}
 \begin{document}
 {\centering
 \huge
@@ -140,8 +140,10 @@ public void insert(Element e) {
 
 
 \section*{Opgave 2}
-Indsæt beskrivelse
+Formålet med denne delopgave er at implamentere træstruktur, denne skal udarbejdes på en sådan måde så den overholer \texttt{Dict} interfacet.\\
+klassen \texttt{DictBinTree}. impalmenter interfacet, metoderne som der skal inføres ser ud som følgende:
 \begin{lstlisting}
+//DictBinTree search
 public boolean search(int k) {
   Node x = root;
   while (x != null && k != x.key) {
@@ -160,14 +162,100 @@ public boolean search(int k) {
     return false;
 }
 \end{lstlisting}
-Indsæt beskrivelse
+\bigskip
+Denne metode er lavet med udgangspunkt i bogens pseudokode.\\
+Det som der foregår i denne er at først læses root, der søges igemmen træet indtil bundet er nået, hvis node'en man er ved er støre end k forsøttes der til venster ellers forsættes der til højre.\\
+\newpage
 \begin{lstlisting}
+//DictBinTree insert
+@Override
+public void insert(int k) {
+	int tempHeight;
+	if (size != 0) {
+		Node y = null;
+       	Node x = root;
+		tempHeight = 1;
+		while (x != null) {
+			y = x;
+			if (k < x.key) {
+				x = x.left;
+			} else {
+				x = x.right;
+			}
+			tempHeight++;
+        }
+		
+		if (y == null) {
+			root.key = k;
+		} else if (k < y.key) {
+			y.left = new Node(k);
+		} else {
+			y.right = new Node(k);
+		}
+            
+		if (height < tempHeight) {
+			height = tempHeight;
+		}
+	}
+	else {
+		root = new Node(k);
+		height = 1;
+	}
+	size++;
+}
+\end{lstlisting}
+\bigskip
+Denne metode er lavet med udgangspunkt i bogens pseudokode, for indsæt i en træstruktur.\\
+Det som der først teste der træet er tomt, hvis det er tomt oprettes den værdig som der skal indsættes som root, for træet. Ellers forsættes ned igemmen koden, hvor der findes den første leddigeplads hvor reglsættet for strukturen er overholdet, på denne plads indsættes k, i form af af ny Node.\\
+Under indsætning af nye værdiger i træet vedligeholdes antallet af elementer heri og højden på træet. Dette kan ses i form af \texttt{size} og \texttt{height}.
+\subsection*{orderedTraversal()}
+Denne metode bruges til at udskrive alle elementerne i strukturen i numeisk rækkefølge.\\
+Måden dette foregår er denne:
+\begin{lstlisting}
+//DictBinTree orderedTraversal
+int[] outOrder;
 public int[] orderedTraversal() {
     outOrder = new int[size];
+    counter = 0;
     inOrderTreeWalk(root);
     return outOrder;
 }
 \end{lstlisting}
+\bigskip
+Denne metode bruges til at oprette et array med længden af elementer i træet. herefter kaldes \texttt{inOrderTreeWalk}, med root elementet for at fortælle hvor der skal startes med at søge.
+\begin{lstlisting}
+//DictBinTree inOrderTreeWalk
+int counter = 0;
+protected int[] inOrderTreeWalk(Node x) {
+	if (x != null) {
+		inOrderTreeWalk(x.left);
+		outOrder[counter++] = x.key;
+		inOrderTreeWalk(x.right);
+	}
+	return outOrder;
+}
+\end{lstlisting}
+\bigskip
+Denne metode er lavet med udgangspunkt i bogens pseudokode.\\
+Metoden benytter sig af rekusive kald, først gås der til venster, herved køres den mindste side at træet først, og hør den højer kaldes skirver den selv til arrayet som bruges som output.\\
+På denne måde sikkers at først skrives de mindste værdiger og herefter bliver de gradvis stører.
+\subsection*{Node}
+Måden hvorpå dataen gemmens i træet er via denne klasse \texttt{Node}. Den indeholder opnysninger om hvad key'en er på den og hvilke børn den har.
+\begin{lstlisting}
+//Node klasse
+protected class Node {
+
+        public Node left, right;
+        public int key;
+        
+        protected Node(int key) {
+            this.key = key;
+            left = null;
+            right = null;
+        }
+    }
+\end{lstlisting}
+\bigskip
 \newpage
 \section*{Opgave 3}
 Koden for hvordan \texttt{Treesort} er implamenteret, den gør brug af datastrukturen \texttt{DictBinTree} som er et binært tree.\\
