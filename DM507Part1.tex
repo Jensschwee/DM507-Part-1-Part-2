@@ -113,6 +113,7 @@ private void minheapify(int i) {
         smallest = right;
 \end{lstlisting}
 \texttt{left(i)} og \texttt{right(i)} er hjælpefunktioner til at hente indexet for hhv. venstre og højre element i heapen ift. et elements index.
+Da vi har med en min-heap at gøre, kan vi antage, hvis der hverken det højre eller venstre element er mindre end det nuværende, så er højre og venstres børn heller ikke mindre end elementet.
 \begin{lstlisting}
     if (smallest != i) {
         swap = heap[i];
@@ -122,15 +123,13 @@ private void minheapify(int i) {
     }
 }
 \end{lstlisting}
+ Hvis vi dog tværtimod finder et element der er mindre, så swapper vi det ud med det nuværende element og min-heapify'er for børnene af det nuværende element. Da denne algoritme er rekursiv indtil at \texttt{i} er det mindste element, vil min-heapen bevares helt til nederste blad.
+ 
+\subsection*{insert(Element e)}
+For at indsætte et element i heapen bruges metoden \texttt{insert}.
 
-
-Indsæt beskrivelse
 \begin{lstlisting}
-/**
- * Inserts the Element e into the heap
- *
- * param e - the element to be inserted
- */
+// PQHeap.java
 @Override
 public void insert(Element e) {
     heapsize++;
@@ -138,13 +137,30 @@ public void insert(Element e) {
     decreaseKey(heapsize-1);
 }
 \end{lstlisting}
+Når et element indsættes i køen, forøges heapens størrelse og det nye element sættes forenden af køen. Herefter skal 'nøglen' for det sidste element formindskes, hvilket gøres med metoden \texttt{decreaseKey}.
 
+\begin{lstlisting}
+// PQHeap.java
+private void decreaseKey(int i) {
+    Element swap;
+
+    if (i != 0) {
+        if (heap[parent(i)].key > heap[i].key) {
+            swap = heap[i];
+            heap[i] = heap[parent(i)];
+            heap[parent(i)] = swap;
+            decreaseKey(parent(i));
+        }
+    }
+}
+\end{lstlisting}
+\texttt{decreaseKey} har til ansvar at bytte elementerne rundt, således at intet element har lavere værdi end sin forælder. Dette burde bevare min-heapen.
 
 \newpage
 
 
 \section*{Opgave 2}
-Formålet med denne delopgave er at implamentere en træstruktur, denne skal udarbejdes på en sådan måde at den overholer \texttt{Dict} interfacet.\\
+Formålet med denne delopgave er at implementere en træstruktur, denne skal udarbejdes på en sådan måde at den overholer \texttt{Dict} interfacet.\\
 Klassen \texttt{DictBinTree} implementerer dette interface og metoderne som der skal indføres ser ud som følgende:
 \begin{lstlisting}
 // DictBinTree.java
