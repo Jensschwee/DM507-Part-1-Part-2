@@ -95,7 +95,9 @@ For at udtrække det mindste element fra heapen, benytter vi, at vi arbejder med
     return min;
 }
 \end{lstlisting}
-Herefter sætter vi det første element til at have samme værdi, som de sidste og reducerer heapsizen, således at vi kan heapifisere direkte fra første element. Dette fungerer da det største element nu er på roden af en min-heap, og hele heapen derfor skal reorganiseres.
+Herefter sætter vi det første element til at have samme værdi, som de sidste og reducerer heapsizen, således at vi kan heapifisere direkte fra første element. Dette fungerer da det største element nu er på roden af en min-heap, og hele heapen derfor skal reorganiseres. \newline
+
+\noindent Dette gøres ved brug af \texttt{minheapify(int i)}.
 \begin{lstlisting}
 // PQHeap.java
 private void minheapify(int i) {
@@ -103,13 +105,15 @@ private void minheapify(int i) {
     int left = left(i);
     int right = right(i);
     Element swap;
-
     if (left <= heapsize && heap[left].key < heap[i].key)
         smallest = left;
     else
         smallest = i;
     if (right <= heapsize && heap[right].key < heap[smallest].key)
         smallest = right;
+\end{lstlisting}
+\texttt{left(i)} og \texttt{right(i)} er hjælpefunktioner til at hente indexet for hhv. venstre og højre element i heapen ift. den elementes index.
+\begin{lstlisting}
     if (smallest != i) {
         swap = heap[i];
         heap[i] = heap[smallest];
