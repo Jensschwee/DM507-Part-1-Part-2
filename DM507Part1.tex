@@ -112,7 +112,7 @@ private void minheapify(int i) {
     if (right <= heapsize && heap[right].key < heap[smallest].key)
         smallest = right;
 \end{lstlisting}
-\texttt{left(i)} og \texttt{right(i)} er hjælpefunktioner til at hente indexet for hhv. venstre og højre element i heapen ift. den elementes index.
+\texttt{left(i)} og \texttt{right(i)} er hjælpefunktioner til at hente indexet for hhv. venstre og højre element i heapen ift. et elements index.
 \begin{lstlisting}
     if (smallest != i) {
         swap = heap[i];
@@ -144,10 +144,10 @@ public void insert(Element e) {
 
 
 \section*{Opgave 2}
-Formålet med denne delopgave er at implamentere træstruktur, denne skal udarbejdes på en sådan måde så den overholer \texttt{Dict} interfacet.\\
-klassen \texttt{DictBinTree}. impalmenter interfacet, metoderne som der skal inføres ser ud som følgende:
+Formålet med denne delopgave er at implamentere en træstruktur, denne skal udarbejdes på en sådan måde at den overholer \texttt{Dict} interfacet.\\
+Klassen \texttt{DictBinTree} implementerer dette interface og metoderne som der skal indføres ser ud som følgende:
 \begin{lstlisting}
-//DictBinTree search
+// DictBinTree.java
 public boolean search(int k) {
   Node x = root;
   while (x != null && k != x.key) {
@@ -168,10 +168,10 @@ public boolean search(int k) {
 \end{lstlisting}
 \bigskip
 Denne metode er lavet med udgangspunkt i bogens pseudokode.\\
-Det som der foregår i denne er at først læses root, der søges igemmen træet indtil bundet er nået, hvis node'en man er ved er støre end k forsøttes der til venster ellers forsættes der til højre.\\
+Det som der foregår i denne er, at først læses root, der søges igennem træet indtil bunden er nået. Hvis den pågældende node er større end k fortsættes der til venstre, ellers fortsættes der til højre.\\
 \newpage
 \begin{lstlisting}
-//DictBinTree insert
+// DictBinTree.java
 @Override
 public void insert(int k) {
 	int tempHeight;
@@ -209,14 +209,14 @@ public void insert(int k) {
 }
 \end{lstlisting}
 \bigskip
-Denne metode er lavet med udgangspunkt i bogens pseudokode, for indsæt i en træstruktur.\\
-Det som der først teste der træet er tomt, hvis det er tomt oprettes den værdig som der skal indsættes som root, for træet. Ellers forsættes ned igemmen koden, hvor der findes den første leddigeplads hvor reglsættet for strukturen er overholdet, på denne plads indsættes k, i form af af ny Node.\\
-Under indsætning af nye værdiger i træet vedligeholdes antallet af elementer heri og højden på træet. Dette kan ses i form af \texttt{size} og \texttt{height}.
+Denne metode er lavet med udgangspunkt i bogens pseudokode for indsæt i en træstruktur.\\
+Det som der først testes for, er om træet er tomt, hvis det er tilfældet oprettes den værdi, som der skal indsættes som root for træet. Ellers fortsættes der ned igennem koden, hvor der findes den første ledige plads, hvor regelsættet for strukturen er overholdet. På denne plads indsættes k, i form af en ny Node.\\
+Under indsætning af nye værdier i træet vedligeholdes antallet af elementer heri og højden på træet. Dette kan ses på \texttt{size} og \texttt{height}.
 \subsection*{orderedTraversal()}
-Denne metode bruges til at udskrive alle elementerne i strukturen i numeisk rækkefølge.\\
-Måden dette foregår er denne:
+Denne metode bruges til at udskrive alle elementerne i strukturen i numerisk rækkefølge.\\
+Måden dette foregår på er som følgende:
 \begin{lstlisting}
-//DictBinTree orderedTraversal
+// DictBinTree.java
 int[] outOrder;
 public int[] orderedTraversal() {
     outOrder = new int[size];
@@ -226,9 +226,9 @@ public int[] orderedTraversal() {
 }
 \end{lstlisting}
 \bigskip
-Denne metode bruges til at oprette et array med længden af elementer i træet. herefter kaldes \texttt{inOrderTreeWalk}, med root elementet for at fortælle hvor der skal startes med at søge.
+Denne metode bruges til at oprette et array med længden af elementer i træet. Herefter kaldes \texttt{inOrderTreeWalk} med root elementet for at fortælle hvor der skal startes med at søge.
 \begin{lstlisting}
-//DictBinTree inOrderTreeWalk
+// DictBinTree.java
 int counter = 0;
 protected int[] inOrderTreeWalk(Node x) {
 	if (x != null) {
@@ -241,12 +241,12 @@ protected int[] inOrderTreeWalk(Node x) {
 \end{lstlisting}
 \bigskip
 Denne metode er lavet med udgangspunkt i bogens pseudokode.\\
-Metoden benytter sig af rekusive kald, først gås der til venster, herved køres den mindste side at træet først, og hør den højer kaldes skirver den selv til arrayet som bruges som output.\\
-På denne måde sikkers at først skrives de mindste værdiger og herefter bliver de gradvis stører.
+Metoden benytter sig af rekursive kald. Først gåes der til venstre, herved køres den mindste side at træet først, og når den højre kaldes skriver den selv til arrayet som bruges som output.\\
+På denne måde sikrers der, at der først skrives de mindste værdier som gradvist forøges. 
 \subsection*{Node}
-Måden hvorpå dataen gemmens i træet er via denne klasse \texttt{Node}. Den indeholder opnysninger om hvad key'en er på den og hvilke børn den har.
+Måden hvorpå dataene gemmens i træet er via klassen \texttt{Node}. Den indeholder oplysninger om hvad key'en er på den, og hvilke børn den har.
 \begin{lstlisting}
-//Node klasse
+// DictBinTree.java
 protected class Node {
 
         public Node left, right;
@@ -262,11 +262,11 @@ protected class Node {
 \bigskip
 \newpage
 \section*{Opgave 3}
-Koden for hvordan \texttt{Treesort} er implamenteret, den gør brug af datastrukturen \texttt{DictBinTree} som er et binært tree.\\
-Ført læses indputter fra scanneren og gemmens i en arrayliste, herefter ligges disse tal i det binnære træ.\\
-Til slut hentes alle talende ud igen af træ'et i sortede orden.
+\texttt{Treesort} gør brug af datastrukturen \texttt{DictBinTree} som er et binært tree.\\
+Først læses inputs fra scanneren og gemmens i en arrayliste, herefter lægges disse tal i det binære træ.\\
+Til slut hentes alle tallene ud igen af træet i sorteret orden.
 \begin{lstlisting}
-//Treesort.java
+// Treesort.java
 List<Integer> numbers = new ArrayList<Integer>();
 Scanner scan = new Scanner(System.in);
 while (scan.hasNextInt()) {
@@ -280,11 +280,11 @@ for (int number : dict.orderedTraversal()) {
 	System.out.println(number);
 }
 \end{lstlisting}
-Koden for hvordan \texttt{Heapsort} er implamenteret, den gør brug af datastrukturen \texttt{PQHeap} som er en priotes kø.\\
-Ført læses indputter fra scanneren og gemmens i en arrayliste, herefter ligges disse tal i det kø'en.\\
-Til slut hentes alle talende ud igen af træ'et i sortede orden.
+\texttt{Heapsort} gør brug af datastrukturen \texttt{PQHeap} som er en prioritetskø.\\
+Først læses inputs fra scanneren og gemmens i en arrayliste, herefter lægges disse tal i køen.\\
+Til slut hentes alle tallene ud igen af køen i sorteret orden.
 \begin{lstlisting}
-//Heapsort.java
+// Heapsort.java
 List<Integer> numbers = new ArrayList<Integer>();
 Scanner scan = new Scanner(System.in);
 while (scan.hasNextInt()) {
@@ -302,11 +302,11 @@ for (int number: numbers) {
 \section*{Test}
 Begge datastrukturer er testet på følgende måde:
 \begin{itemize}
-  \item console med indput
-  \item console med redirection og output file  
-  \item udleveret \texttt{TestProjectPartI} klasse
+  \item Terminal med direkte input
+  \item Terminal med redirection of input + output  
+  \item Den udleverede \texttt{TestProjectPartI} klasse
 \end{itemize}
 \bigskip
-Datastrukeren vil virke på alle int's som ligger i int32 der er ikke testet for støre indput end dette. \texttt{Treesort} og \texttt{Heapsort} virker begge med disse indput.
+Datastrukeren vil virke på alle heltal i størrelsenordenen fra $-(2^{31})$ til $2^{31}-1$. \texttt{Treesort} og \texttt{Heapsort} virker begge med disse input.
 
 \end{document}
