@@ -87,6 +87,7 @@ public Element extractMin() {
     Element min;
     min = heap[0];    
 \end{lstlisting}
+\bigskip
 For at udtrække det mindste element fra heapen, benytter vi, at vi arbejder med en min-heap. Det vil sige, at vores mindste element altid vil være på plads 0.
 \begin{lstlisting}    
     heap[0] = heap[heapsize-1];
@@ -225,6 +226,7 @@ public void insert(int k) {
 \bigskip
 Det som der først testes for, er om træet er tomt. Hvis det er tilfældet oprettes den værdi, som der skal indsættes som root for træet. Ellers fortsættes der ned igennem koden, hvor der findes den første ledige plads, hvor regelsættet for strukturen er overholdet. På denne plads indsættes \texttt{k}, i form af en ny \texttt{node.}\\
 Under indsætning af nye værdier i træet vedligeholdes antallet af elementer heri og højden på træet. Dette kan ses på \texttt{size} og \texttt{height}.
+\newpage
 \subsection*{orderedTraversal()}
 Denne metode bruges til at udskrive alle elementerne i strukturen i numerisk stigende rækkefølge.\\
 Måden dette foregår på er som følgende:
