@@ -11,18 +11,15 @@ public class Treesort {
 
         List<Integer> numbers = new ArrayList<Integer>();
         Scanner scan = new Scanner(System.in);
-        while (scan.hasNextInt()) {
+        while (scan.hasNextInt())
             numbers.add(scan.nextInt());
-        }
 
         Dict dict = new DictBinTree();
 
-        for (int number : numbers) {
+        for (int number : numbers)
             dict.insert(number);
-        }
 
-        for (int number : dict.orderedTraversal()) {
+        for (int number : dict.orderedTraversal())
             System.out.println(number);
-        }
     }
 }

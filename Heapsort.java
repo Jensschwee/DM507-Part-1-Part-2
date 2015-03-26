@@ -13,17 +13,14 @@ public class Heapsort {
         List<Integer> numbers = new ArrayList<Integer>();
 
         Scanner scan = new Scanner(System.in);
-        while (scan.hasNextInt()) {
+        while (scan.hasNextInt())
             numbers.add(scan.nextInt());
-        }
 
         PQ pq = new PQHeap(numbers.size());
-        for (int number : numbers) {
+        for (int number : numbers)
             pq.insert(new Element(number, number));
-        }
 
-        for (int number: numbers) {
+        for (int i = 0; i < numbers.size(); i++)
             System.out.println(pq.extractMin().key);
-        }
     }
 }
