@@ -33,295 +33,36 @@
   tabsize=3
 }
 \pagestyle{fancy}
-\fancyhead[CO,CE]{Projekt del 1 - DM507 - jesph13 og jenss12}
+\fancyhead[CO,CE]{Projekt del 2 - DM507 - jesph13 og jenss12}
 \begin{document}
 {\centering
 \huge
-Projekt del 1\\
+Projekt del 2\\
 Algoritmer og datastrukturer (DM507)\\
 \large
 \bigskip
 Institut for Matematik og Datalogi Syddansk Universitet, Odense\\
 \bigskip
-8. April 2015\\
+20. Maj 2015\\
 \bigskip
 Af Jesper Wohlert Hansen \& Jens Hjort Schwee\\
 }
 \newpage
 
 \section*{Introduktion}
-Denne rapport dækker over implementationer af datastukturerne \texttt{Priority Queue} og \texttt{Binary Tree} ved brug af hhv. en \texttt{Heap} og en \texttt{Dictionary} samt tilhørende algoritmer til behandling af disse strukturer. Disse implementationer er skrevet i Java og implementerer følgende interfaces:
-
-\begin{verbatim}
-public interface PQ {
-    public Element extractMin();
-    public void insert(Element e);
-}
-\end{verbatim}
-
-
-\begin{verbatim}
-public interface Dict {
-    public void insert(int k);
-    public int[] orderedTraversal();
-    public boolean search(int k);
-}
-\end{verbatim}
-
-De konkrete implementationer er baseret på pseudokode fra bogen \emph{Introduction to Algorithms, third edition}\footnote{http://mitpress.mit.edu/books/introduction-algorithms}.
-
-
-Rapporten indeholder uddybende beskrivelser af datastrukturerne med tilhørende kodestumper. De mest trivielle kodestumper er undladt til fordel for korthed.
 
 \newpage
 
 \section*{Opgave 1}
-Målet med denne opgave er at udarbejde en prioritetskø der implementerer interfacet \texttt{PQ}. Køen skal have en heapstruktur, og skal indeholde og behandle objekter af klassen \texttt{Element}. Vi ønsker at fokusere på interface metoderne, samt private metodekald herfra.
-
-\subsection*{extractMin()}
-
-\begin{lstlisting}
-// PQHeap.java
-@Override
-public Element extractMin() {
-    Element min;
-    min = heap[0];    
-\end{lstlisting}
-\bigskip
-For at udtrække det mindste element fra heapen, benytter vi, at vi arbejder med en min-heap. Det vil sige, at vores mindste element altid vil være på plads 0.
-\begin{lstlisting}    
-    heap[0] = heap[heapsize-1];
-    heapsize--;
-    minheapify(0);
-    return min;
-}
-\end{lstlisting}
-Herefter sætter vi det første element til at have samme værdi, som det sidste og reducerer heapsizen, således at vi kan heapifisere direkte fra første element. Dette fungerer da det største element nu er på roden af en min-heap, og hele heapen derfor skal reorganiseres. \newline
-
-\noindent Dette gøres ved brug af \texttt{minheapify(int i)}.
 
 \newpage
-
-\begin{lstlisting}
-// PQHeap.java
-private void minheapify(int i) {
-    int smallest;
-    int left = left(i);
-    int right = right(i);
-    Element swap;
-    if (left <= heapsize && heap[left].key < heap[i].key)
-        smallest = left;
-    else
-        smallest = i;
-    if (right <= heapsize && heap[right].key < heap[smallest].key)
-        smallest = right;
-\end{lstlisting}
-\texttt{left(i)} og \texttt{right(i)} er hjælpefunktioner til at hente indexet for hhv. venstre og højre element i heapen ift. et elements index.
-Da vi har med en min-heap at gøre, kan vi antage, hvis der hverken det højre eller venstre element er mindre end det nuværende, så er deres børn heller ikke mindre.
-\begin{lstlisting}
-    if (smallest != i) {
-        swap = heap[i];
-        heap[i] = heap[smallest];
-        heap[smallest] = swap;
-        minheapify(smallest);
-    }
-}
-\end{lstlisting}
- Hvis vi dog tværtimod finder et element der er mindre, så swapper vi det ud med det nuværende element og min-heapify'er for børnene af det nuværende element. Da denne algoritme er rekursiv indtil at \texttt{i} har fundet sin plads, vil min-heapen bevares helt til nederste blad.
- 
-\subsection*{insert(Element e)}
-For at indsætte et element i prioritetskøen bruges metoden \texttt{insert}.
-
-\begin{lstlisting}
-// PQHeap.java
-@Override
-public void insert(Element e) {
-    heapsize++;
-    heap[heapsize-1] = e;
-    decreaseKey(heapsize-1);
-}
-\end{lstlisting}
-Når et element indsættes i køen, forøges heapens størrelse og det nye element sættes forenden af køen. Herefter skal elementet omrokeres så den står på den rigtige plads, hvilket gøres med metoden \texttt{decreaseKey}.
-\newpage
-\begin{lstlisting}
-// PQHeap.java
-private void decreaseKey(int i) {
-    Element swap;
-
-    if (i != 0) {
-        if (heap[parent(i)].key > heap[i].key) {
-            swap = heap[i];
-            heap[i] = heap[parent(i)];
-            heap[parent(i)] = swap;
-            decreaseKey(parent(i));
-        }
-    }
-}
-\end{lstlisting}
-\texttt{decreaseKey} har til ansvar at bytte elementerne rundt, således at intet element har lavere 'nøgle' end sin forælder. Dette burde bevare min-heapen.
-
-\newpage
-
 
 \section*{Opgave 2}
-Formålet med denne delopgave er at implementere en træstruktur, denne skal udarbejdes på en sådan måde at den overholer \texttt{Dict} interfacet.\\
-Klassen \texttt{DictBinTree} implementerer dette interface og metoderne er beskrevet i dette afsnit
-\begin{lstlisting}
-// DictBinTree.java
-public boolean search(int k) {
-  Node x = root;
-  while (x != null && k != x.key) {
-        if (k < x.key) {
-            x = x.left;
-        } else {
-            x = x.right;
-        }
-    }
 
-    if (x == null) {
-        return false;
-    } else if (x.key == k) {
-        return true;
-    }
-    return false;
-}
-\end{lstlisting}
-\bigskip
-Det som der foregår i denne metoder er, at root læses og der søges igennem træet indtil bunden er nået eller nøglen er fundet. Hvis den pågældende node er større end \texttt{k} fortsættes der til venstre, ellers fortsættes der til højre. Hvis noden findes returneres sandt, ellers falsk.\\
 \newpage
-\begin{lstlisting}
-// DictBinTree.java
-@Override
-public void insert(int k) {
-	int tempHeight;
-	if (size != 0) {
-		Node y = null;
-      Node x = root;
-		tempHeight = 1;
-		while (x != null) {
-			y = x;
-			if (k < x.key)
-				x = x.left;
-			else
-				x = x.right;			
-			tempHeight++;
-      }
-		
-		if (y == null)
-			root.key = k;
-		else if (k < y.key)
-			y.left = new Node(k);
-		else
-			y.right = new Node(k);		
-            
-		if (height < tempHeight)
-			 height = tempHeight;		
-	}
-	else {
-		 root = new Node(k); height = 1;
-	}
-	size++;
-}
-\end{lstlisting}
-\bigskip
-Det som der først testes for, er om træet er tomt. Hvis det er tilfældet oprettes den værdi, som der skal indsættes som root for træet. Ellers fortsættes der ned igennem koden, hvor der findes den første ledige plads, hvor regelsættet for strukturen er overholdet. På denne plads indsættes \texttt{k}, i form af en ny \texttt{node.}\\
-Under indsætning af nye værdier i træet vedligeholdes antallet af elementer heri og højden på træet. Dette kan ses på \texttt{size} og \texttt{height}.
-\newpage
-\subsection*{orderedTraversal()}
-Denne metode bruges til at udskrive alle elementerne i strukturen i numerisk stigende rækkefølge.\\
-Måden dette foregår på er som følgende:
-\begin{lstlisting}
-// DictBinTree.java
-int[] outOrder;
-public int[] orderedTraversal() {
-    outOrder = new int[size];
-    counter = 0;
-    inOrderTreeWalk(root);
-    return outOrder;
-}
-\end{lstlisting}
-\bigskip
-Denne metode bruges til at oprette et array med længden af elementer i træet. Herefter kaldes \texttt{inOrderTreeWalk} med root elementet som parameter for at fortælle hvor udgangspunket er for algoritmen.
-\begin{lstlisting}
-// DictBinTree.java
-int counter = 0;
-protected int[] inOrderTreeWalk(Node x) {
-	if (x != null) {
-		inOrderTreeWalk(x.left);
-		outOrder[counter++] = x.key;
-		inOrderTreeWalk(x.right);
-	}
-	return outOrder;
-}
-\end{lstlisting}
-\bigskip
-Metoden \texttt{inOrderTreeWalk} benytter sig af rekursive kald. Først gåes der til venstre, herved køres den mindste side at træet først. Når venstre side er kørt, kommer algoritmen tilbage til udgangspunketet. Hvorefter højresiden køres igennem.\\
-På denne måde sikres der, at der først skrives de mindste værdier som gradvist forøges. 
-\newpage
-\subsection*{Node}
-Måden hvorpå dataene gemmens i træet er via klassen \texttt{Node}. Den indeholder oplysninger dens key og børn.
-\begin{lstlisting}
-// DictBinTree.java
-protected class Node {
 
-        public Node left, right;
-        public int key;
-        
-        protected Node(int key) {
-            this.key = key;
-            left = null;
-            right = null;
-        }
-    }
-\end{lstlisting}
-\bigskip
-\newpage
-\section*{Opgave 3}
-\texttt{Treesort} gør brug af datastrukturen \texttt{DictBinTree} som er et binært tree.\\
-Først læses inputs fra scanneren og gemmens i en arrayliste, herefter lægges disse tal i det binære træ.\\
-Til slut hentes alle tallene ud igen af træet i sorteret orden.
-\begin{lstlisting}
-// Treesort.java
-List<Integer> numbers = new ArrayList<Integer>();
-Scanner scan = new Scanner(System.in);
-while (scan.hasNextInt())
-    numbers.add(scan.nextInt());
-
-Dict dict = new DictBinTree();
-
-for (int number : numbers)
-    dict.insert(number);
-
-for (int number : dict.orderedTraversal())
-    System.out.println(number);
-\end{lstlisting}
-\texttt{Heapsort} gør brug af datastrukturen \texttt{PQHeap} som er en prioritetskø.\\
-Først læses inputs fra scanneren og gemmens i en arrayliste, herefter lægges disse tal i køen.\\
-Til slut hentes alle tallene ud igen af køen i sorteret orden.
-\begin{lstlisting}
-// Heapsort.java
-List<Integer> numbers = new ArrayList<Integer>();
-
-Scanner scan = new Scanner(System.in);
-while (scan.hasNextInt())
-    numbers.add(scan.nextInt());
-
-PQ pq = new PQHeap(numbers.size());
-for (int number : numbers)
-    pq.insert(new Element(number, number));
-
-for (int i = 0; i < numbers.size(); i++)
-    System.out.println(pq.extractMin().key);    
-\end{lstlisting}
-\newpage
 \section*{Test}
-Begge datastrukturer er testet på følgende måde:
-\begin{itemize}
-  \item Terminal med direkte input
-  \item Terminal med redirection of input + output  
-  \item Den udleverede \texttt{TestProjectPartI} klasse
-\end{itemize}
-\bigskip
-Datastrukeren vil virke på alle heltal i størrelsenordenen fra $-(2^{31})$ til $2^{31}-1$. \texttt{Treesort} og \texttt{Heapsort} virker begge med disse input.
+
+Grænsetilfælde testet.
 
 \end{document}
