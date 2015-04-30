@@ -2,58 +2,66 @@ import java.util.stream.*;
 
 public class Huffman {
 
-    public static Element makeHuffmanTree(int[] table) {
-        
-        // Removes table indexes with frequency = 0 and counts them.
-        int countElements = (int) IntStream.of(table)
-            .filter(n -> n != 0)
-            .count();
+  private static DictBinTree tree = new DictBinTree();
 
-        DictBinTree tree = new DictBinTree();
+  /**
+   * Builds a new Huffman tree given a table of frequencies
+   *
+   * param table - an array of frequencies
+   * return - the root node of the Huffman tree
+   */
+  public static Element build(int[] table) {
+    int elementCount, i;
 
-        PQ pqHeap = new PQHeap(countElements);
+    elementCount = (int) IntStream.of(table)
+      .filter(n -> n != 0)
+      .count();
 
-        // Removes table indexes with frequency = 0 and
-        // inserts elements into the pqHeap with the remaining indices
-        IntStream.range(0, table.length)
-          .filter(n -> table[n] != 0)   //
-          .forEach(i -> pqHeap.insert(new Element(table[i], tree.new Node(i))));
+    PQ pqHeap = new PQHeap(elementCount);
 
-        for (int i = 0; i < countElements-1; i++) {
-            DictBinTree.Node node = tree.new Node(i);
-            Element left = pqHeap.extractMin();
-            Element right = pqHeap.extractMin();
-            node.left = (DictBinTree.Node)left.data;
-            node.right = (DictBinTree.Node)right.data;
-            int counter = left.key + right.key;
-            pqHeap.insert(new Element(counter, node));
-        }
+    // Fill the heap with elementCount number of elements with
+    // the frequency as the element key and a childless node with the value
+    // of the character as the node key as the data.
+    IntStream.range(0, table.length)
+      .filter(n -> table[n] != 0)
+      .forEach(n -> pqHeap.insert(new Element(table[n], tree.new Node(n))));
 
-        return pqHeap.extractMin();
+    for (i = 0; i < elementCount-1; i++) {
+      Element left, right;
+      int key;
+
+      DictBinTree.Node node = tree.new Node(i);
+
+      left = pqHeap.extractMin();
+      right = pqHeap.extractMin();
+
+      node.left = (DictBinTree.Node) left.data;
+      node.right = (DictBinTree.Node) right.data;
+
+      key = left.key + right.key;
+
+      node.key = key;
+
+      pqHeap.insert(new Element(key, node));
     }
 
-    public static String[] makeTranslateFromHuffmanTree(DictBinTree.Node root)
-    {
-        String[] table = new String[256];
+    return pqHeap.extractMin();
+  }
 
-        wakeHuffmanTree(root,table,"");
+  public static String[] makeTranslateFromHuffmanTree(DictBinTree.Node root) {
+    String[] table = new String[256];
+    wakeHuffmanTree(root,table,"");
+    return table;
+  }
 
-        return table;
+  private static void wakeHuffmanTree(DictBinTree.Node n, String[] table, String s) {
+    if (n != null) {
+      if (n.left == null && n.right == null) {
+        table[n.key] = s;
+      } else {
+        wakeHuffmanTree(n.left, table, s+"0");
+        wakeHuffmanTree(n.right, table, s+"1");
+      }
     }
-
-    private static void wakeHuffmanTree(DictBinTree.Node n, String[] table, String s)
-    {
-        if(n != null)
-        {
-            if(n.left == null && n.right == null)
-            {
-                table[n.key] = s;
-            }
-            else
-            {
-                wakeHuffmanTree(n.left, table, s+"0");
-                wakeHuffmanTree(n.right, table, s+"1");
-            }
-        }
-    }
+  }
 }
