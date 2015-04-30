@@ -24,25 +24,17 @@ public class Encode {
       }      
     }
 
-    in.close();    
+    in.close();
 
-    for (int i = 0; i < frequencies.length; i++) {      
-      System.out.println(frequencies[i]);
-    }
-
-    huffman(frequencies);
-
-    // TODO: output stuff
+    DictBinTree.Node node = (DictBinTree.Node) Huffman.makeHuffmanTree(frequencies).data;
+    printChildren(node);
   }
 
-  private static void huffman(int[] table) {
-    PQ pqHeap = new PQHeap(table.length);
-    DictBinTree tree = new DictBinTree();
-
-    for(int i = 0; i < table.length; i++) {
-      if(table[i] != 0) {
-        pqHeap.insert(new Element(table[i], tree.new Node(i)));
-      }
+  private static void printChildren(DictBinTree.Node n) {
+    if (n != null) {
+      printChildren(n.left);
+      System.out.println(n.key);
+      printChildren(n.right);
     }
   }
 }
