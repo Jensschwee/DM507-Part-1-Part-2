@@ -27,7 +27,7 @@ public class Encode {
     in.close();    
 
     for (int i = 0; i < frequencies.length; i++) {      
-      System.out.println(frequencies[i] + "\t");
+      System.out.println(frequencies[i]);
     }
 
     huffman(frequencies);

@@ -115,3 +115,6 @@ nb-configuration.xml
 # Files
 input.txt
 output.txt
+
+testinput
+testout
