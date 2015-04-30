@@ -32,28 +32,31 @@ public class Encode {
     }*/
 
     Element e = Huffman.build(frequencies);
-
-    printChildren((DictBinTree.Node) e.data);
-
     DictBinTree.Node node = (DictBinTree.Node) e.data;
-    String[] encodeTable = Huffman.makeTranslateFromHuffmanTree(node);
 
-    writeFile(args, frequencies, encodeTable);
+    //printChildren(node);
+
+    String[] encodedTable = Huffman.encode(node);
+
+    writeFile(args, frequencies, encodedTable);
+
+    in.close();
   }
 
   private static void writeFile(String[] args, int[] frequencies, String[] encodeTable) throws IOException {
-    FileInputStream inFile;
-    BitInputStream in;
-    String bytelist;
-    int bit;
+    FileInputStream inFile = new FileInputStream(args[0]);
     FileOutputStream outFile = new FileOutputStream(args[1]);
-    BitOutputStream out = new BitOutputStream(outFile);
-    for(int i : frequencies)
-        out.writeInt(i);
 
-    inFile = new FileInputStream(args[0]);
-    in = new BitInputStream(inFile);
-    bytelist = "";
+    BitInputStream in = new BitInputStream(inFile);;        
+    BitOutputStream out = new BitOutputStream(outFile);
+
+    String bytelist = "";
+    int bit;
+
+    for(int i : frequencies) {
+      out.writeInt(i);
+    }
+
     while ((bit = in.readBit()) != -1) {
       bytelist += "" + bit;
       if (bytelist.length() % 8 == 0) {

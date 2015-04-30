@@ -44,24 +44,30 @@ public class Huffman {
 
       pqHeap.insert(new Element(key, node));
     }
-
     return pqHeap.extractMin();
   }
 
-  public static String[] makeTranslateFromHuffmanTree(DictBinTree.Node root) {
+  /**
+   * Uses Huffman coding to encode a Huffman tree
+   *
+   * param root - the rootnode of the Huffman tree
+   * return - a table of encoded values
+   */
+  public static String[] encode(DictBinTree.Node root) {
     String[] table = new String[256];
-    wakeHuffmanTree(root,table,"");
+    recursiveEncode(root, table, "");
     return table;
   }
 
-  private static void wakeHuffmanTree(DictBinTree.Node n, String[] table, String s) {
-    if (n != null) {
-      if (n.left == null && n.right == null) {
-        table[n.key] = s;
-      } else {
-        wakeHuffmanTree(n.left, table, s+"0");
-        wakeHuffmanTree(n.right, table, s+"1");
-      }
+  public static void decode() {}
+
+  private static void recursiveEncode(DictBinTree.Node node, String[] table, String bitString) {
+    if (node == null) return;
+    if (node.left == null && node.right == null) {
+      table[node.key] = bitString;
+    } else {
+      recursiveEncode(node.left, table, bitString + "0");
+      recursiveEncode(node.right, table, bitString + "1");
     }
   }
 }
