@@ -26,8 +26,9 @@ public class Encode {
 
     in.close();
 
-    DictBinTree.Node node = (DictBinTree.Node) Huffman.makeHuffmanTree(frequencies).data;
-    printChildren(node);
+   Element e = Huffman.makeHuffmanTree(frequencies);
+      DictBinTree.Node n = (DictBinTree.Node)e.data;
+      String[] test = Huffman.makeTranslateFromHuffmanTree(n);
   }
 
   private static void printChildren(DictBinTree.Node n) {
