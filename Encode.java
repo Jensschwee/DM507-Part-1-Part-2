@@ -24,17 +24,8 @@ public class Encode {
       }      
     }
 
-    /*
-     * Prints the array of frequencies
-     *
-    for (int i = 0; i < frequencies.length; i++) {
-      System.out.printf("The frequency of %d is %d\n", i, frequencies[i]);
-    }*/
-
     Element e = Huffman.build(frequencies);
     DictBinTree.Node node = (DictBinTree.Node) e.data;
-
-    //printChildren(node);
 
     String[] encodedTable = Huffman.encode(node);
 
@@ -60,21 +51,18 @@ public class Encode {
     while ((bit = in.readBit()) != -1) {
       bytelist += "" + bit;
       if (bytelist.length() % 8 == 0) {
-        for(char c : encodeTable[Integer.parseInt(bytelist, 2)].toCharArray()) {
+        for (char c : encodeTable[Integer.parseInt(bytelist, 2)].toCharArray()) {
           out.writeBit(Integer.parseInt(Character.toString(c)));
         }
         bytelist = "";
       }
     }
+
+    // padding
+    out.writeInt(0);
+    out.writeInt(1);
+
     in.close();
     out.close();
-  }
-
-  private static void printChildren(DictBinTree.Node n) {
-    if (n != null) {
-      System.out.println(n.key);
-      printChildren(n.left);
-      printChildren(n.right);
-    }
   }
 }

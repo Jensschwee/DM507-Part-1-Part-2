@@ -61,6 +61,13 @@ public class Huffman {
 
   public static void decode() {}
 
+  /**
+   * Recursively generates bitstrings based on a Huffman tree.
+   *
+   * param node - current node that is being proccessed
+   * param table - the table to insert strings into
+   * param bitString - the string to insert into the table
+   */
   private static void recursiveEncode(DictBinTree.Node node, String[] table, String bitString) {
     if (node == null) return;
     if (node.left == null && node.right == null) {
