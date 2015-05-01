@@ -1,3 +1,5 @@
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.*;
 
 public class Huffman {
@@ -59,7 +61,28 @@ public class Huffman {
     return table;
   }
 
-  public static void decode() {}
+  public static Map<String,Integer> decode(DictBinTree.Node root) {
+      Map<String,Integer> table = new HashMap<>();
+      recursiveDecode(root, table, "");
+      return table;
+  }
+
+    /**
+     * Recursively generates bitstrings based on a Huffman tree.
+     *
+     * param node - current node that is being proccessed
+     * param table - the table to insert strings into
+     * param bitString - the string to insert into the table
+     */
+    private static void recursiveDecode(DictBinTree.Node node, Map<String,Integer> table, String bitString) {
+        if (node == null) return;
+        if (node.left == null && node.right == null) {
+            table.put(bitString, node.key);
+        } else {
+            recursiveDecode(node.left, table, bitString + "0");
+            recursiveDecode(node.right, table, bitString + "1");
+        }
+    }
 
   /**
    * Recursively generates bitstrings based on a Huffman tree.

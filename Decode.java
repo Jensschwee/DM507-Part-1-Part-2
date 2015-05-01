@@ -1,5 +1,6 @@
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.Map;
 
 public class Decode {
   public static void main(String[] args) throws Exception {
@@ -12,34 +13,29 @@ public class Decode {
     BitInputStream in = new BitInputStream(inFile);
     BitOutputStream out = new BitOutputStream(outFile);
 
-    // Read an int (i.e., four bytes) from input file.
-    int i = in.readInt();
+      int[] frequencies = new int[256];
+      Map<String,Integer> decodeTable;
 
-    // Print the value on screen (probably multi-digit integer, if
-    // run on a textfile, as four bytes representing some chars
-    // are ususally the bit pattern of some big integer).
-    System.out.println(i);
+      for (int i = 0; i < frequencies.length-1; i++) {
+          frequencies[i] = in.readInt();
+      }
 
-    // Write the int again to output file (as same four bytes, so
-    // bytes should appear again in output file exactly they were
-    // in input file)
-    out.writeInt(i);
+      Element e = Huffman.build(frequencies);
+      decodeTable = Huffman.decode((DictBinTree.Node) e.data);
 
-    // Now read last bits of input file, writing them again on
-    // output file. Note the while-expression going through the
-    // file until no more bits are available (signaled by
-    // returning -1 instead of 0 or 1).
-    int bit;
-    while ( (bit = in.readBit()) != -1 )
-        out.writeBit(bit);
+      String readBits = "";
+      int bit;
+      while ((bit = in.readBit()) != -1) {
+          readBits += "" + bit;
+          Integer decode = decodeTable.get(readBits);
+          if(decode != null)
+          {
+              out.writeInt(decode);
+              readBits = "";
+          }
+      }
 
-    // Write two bits more to output file. This will be padded
-    // with six 0 bits when closing the output stream, hence give
-    // the character '@' (which in ASCII has pattern 01000000).
-    out.writeBit(0);
-    out.writeBit(1);
-
-    // Close the streams cleanly (automatically padding output
+      // Close the streams cleanly (automatically padding output
     // streams with 0 bits until a multiple of bytes have been
     // written).
     in.close();
