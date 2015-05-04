@@ -16,7 +16,8 @@ public class Decode {
       int[] frequencies = new int[256];
       Map<String,Integer> decodeTable;
 
-      for (int i = 0; i < frequencies.length-1; i++) {
+
+      for (int i = 0; i < frequencies.length; i++) {
           frequencies[i] = in.readInt();
       }
 
@@ -25,15 +26,21 @@ public class Decode {
 
       String readBits = "";
       int bit;
+      int wirterCount = e.key;
+
       while ((bit = in.readBit()) != -1) {
           readBits += "" + bit;
           Integer decode = decodeTable.get(readBits);
           if(decode != null)
           {
-              out.writeInt(decode);
+              out.writeInt((int)decode);
               readBits = "";
+              wirterCount--;
+              if (wirterCount < 1)
+                  break;
           }
       }
+
 
       // Close the streams cleanly (automatically padding output
     // streams with 0 bits until a multiple of bytes have been
