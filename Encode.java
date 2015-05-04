@@ -3,7 +3,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class Encode {
-  
+
   public static void main(String[] args) throws Exception {
 
     FileInputStream inFile = new FileInputStream(args[0]);
@@ -23,7 +23,7 @@ public class Encode {
       if (bytelist.length() % 8 == 0) {
         frequencies[Integer.parseInt(bytelist, 2)] += 1;
         bytelist = "";
-      }      
+      }
     }
 
     Element e = Huffman.build(frequencies);
@@ -34,7 +34,7 @@ public class Encode {
     // 2. passthrough - write code to file
     inFile = new FileInputStream(args[0]);
     in = new BitInputStream(inFile);
-    
+
     for(int i : frequencies) {
       out.writeInt(i);
     }
