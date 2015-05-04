@@ -3,7 +3,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class Encode {
-  
+
   public static void main(String[] args) throws Exception {
 
     FileInputStream inFile = new FileInputStream(args[0]);
@@ -16,30 +16,31 @@ public class Encode {
     int bit;
     int[] frequencies = new int[256];
     String bytelist = "";
-    String[] encodedTable;
+    String[] encodedTable = null;
 
     while ((bit = in.readBit()) != -1) {
       bytelist += "" + bit;
       if (bytelist.length() % 8 == 0) {
         frequencies[Integer.parseInt(bytelist, 2)] += 1;
         bytelist = "";
-      }      
+      }
     }
 
-      for (int i : frequencies) {
-          out.writeInt(i);
-      }
+    for (int i : frequencies) out.writeInt(i);
 
-    Element e = Huffman.build(frequencies);
-      if(e != null) {
-          encodedTable = Huffman.encode((DictBinTree.Node) e.data);
+    try {
+      Element e = Huffman.build(frequencies);
+      encodedTable = Huffman.encode((DictBinTree.Node) e.data);
+    } catch (NullPointerException ex) {
+      System.err.println("Error: Cannot encode an empty file.");
+    }
 
     in.close();
 
     // 2. passthrough - write code to file
     inFile = new FileInputStream(args[0]);
     in = new BitInputStream(inFile);
-    
+
 
     while ((bit = in.readBit()) != -1) {
       bytelist += "" + bit;
@@ -51,19 +52,8 @@ public class Encode {
       }
     }
 
-
-          while ((bit = in.readBit()) != -1) {
-              bytelist += "" + bit;
-              if (bytelist.length() % 8 == 0) {
-                  for (char c : encodedTable[Integer.parseInt(bytelist, 2)].toCharArray()) {
-                      out.writeBit(Integer.parseInt(Character.toString(c)));
-                  }
-                  bytelist = "";
-              }
-          }
-          in.close();
-          out.close();
-      }
+    in.close();
+    out.close();
 
   }
 

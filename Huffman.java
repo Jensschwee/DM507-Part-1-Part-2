@@ -18,36 +18,37 @@ public class Huffman {
     elementCount = (int) IntStream.of(table)
       .filter(n -> n != 0)
       .count();
+
     if (elementCount > 0) {
-        PQ pqHeap = new PQHeap(elementCount);
+      PQ pqHeap = new PQHeap(elementCount);
 
-        // Fill the heap with elementCount number of elements with
-        // the frequency as the element key and a childless node with the value
-        // of the character as the node key as the data.
-        IntStream.range(0, table.length)
-                .filter(n -> table[n] != 0)
-                .forEach(n -> pqHeap.insert(new Element(table[n], tree.new Node(n))));
+      // Fill the heap with elementCount number of elements with
+      // the frequency as the element key and a childless node with the value
+      // of the character as the node key as the data.
+      IntStream.range(0, table.length)
+        .filter(n -> table[n] != 0)
+        .forEach(n -> pqHeap.insert(new Element(table[n], tree.new Node(n))));
 
-        for (i = 0; i < elementCount - 1; i++) {
-            Element left, right;
-            int key;
+      for (i = 0; i < elementCount - 1; i++) {
+        Element left, right;
+        int key;
 
-            DictBinTree.Node node = tree.new Node(i);
+        DictBinTree.Node node = tree.new Node(i);
 
-            left = pqHeap.extractMin();
-            right = pqHeap.extractMin();
+        left = pqHeap.extractMin();
+        right = pqHeap.extractMin();
 
-            node.left = (DictBinTree.Node) left.data;
-            node.right = (DictBinTree.Node) right.data;
+        node.left = (DictBinTree.Node) left.data;
+        node.right = (DictBinTree.Node) right.data;
 
-            key = left.key + right.key;
+        key = left.key + right.key;
 
-            node.key = key;
+        node.key = key;
 
-            pqHeap.insert(new Element(key, node));
-        }
+        pqHeap.insert(new Element(key, node));
+      }
 
-        return pqHeap.extractMin();
+      return pqHeap.extractMin();
     }
     return null;
   }
@@ -65,27 +66,20 @@ public class Huffman {
   }
 
   public static Map<String,Integer> decode(DictBinTree.Node root) {
-      Map<String,Integer> table = new HashMap<>();
-      recursiveDecode(root, table, "");
-      return table;
+    Map<String, Integer> table = new HashMap<String, Integer>();
+    recursiveDecode(root, table, "");
+    return table;
   }
 
-    /**
-     * Recursively generates bitstrings based on a Huffman tree.
-     *
-     * param node - current node that is being proccessed
-     * param table - the table to insert strings into
-     * param bitString - the string to insert into the table
-     */
-    private static void recursiveDecode(DictBinTree.Node node, Map<String,Integer> table, String bitString) {
-        if (node == null) return;
-        if (node.left == null && node.right == null) {
-            table.put(bitString, node.key);
-        } else {
-            recursiveDecode(node.left, table, bitString + "0");
-            recursiveDecode(node.right, table, bitString + "1");
-        }
+  private static void recursiveDecode(DictBinTree.Node node, Map<String,Integer> table, String bitString) {
+    if (node == null) return;
+    if (node.left == null && node.right == null) {
+      table.put(bitString, node.key);
+    } else {
+      recursiveDecode(node.left, table, bitString + "0");
+      recursiveDecode(node.right, table, bitString + "1");
     }
+  }
 
   /**
    * Recursively generates bitstrings based on a Huffman tree.
