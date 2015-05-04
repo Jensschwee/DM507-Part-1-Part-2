@@ -22,30 +22,31 @@ public class Decode {
       }
 
       Element e = Huffman.build(frequencies);
-      decodeTable = Huffman.decode((DictBinTree.Node) e.data);
+      if(e != null) {
+          decodeTable = Huffman.decode((DictBinTree.Node) e.data);
 
-      String readBits = "";
-      int bit;
-      int wirterCount = e.key;
+          String readBits = "";
+          int bit;
+          int wirterCount = e.key;
 
-      while ((bit = in.readBit()) != -1) {
-          readBits += "" + bit;
-          Integer decode = decodeTable.get(readBits);
-          if(decode != null)
-          {
-              out.writeInt((int)decode);
-              readBits = "";
-              wirterCount--;
-              if (wirterCount < 1)
-                  break;
+          while ((bit = in.readBit()) != -1) {
+              readBits += "" + bit;
+              Integer decode = decodeTable.get(readBits);
+              if (decode != null) {
+                  out.writeInt((int) decode);
+                  readBits = "";
+                  wirterCount--;
+                  if (wirterCount < 1)
+                      break;
+              }
           }
+
+
+          // Close the streams cleanly (automatically padding output
+          // streams with 0 bits until a multiple of bytes have been
+          // written).
+          in.close();
+          out.close();
       }
-
-
-      // Close the streams cleanly (automatically padding output
-    // streams with 0 bits until a multiple of bytes have been
-    // written).
-    in.close();
-    out.close();
   }
 }

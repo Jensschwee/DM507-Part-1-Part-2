@@ -18,35 +18,38 @@ public class Huffman {
     elementCount = (int) IntStream.of(table)
       .filter(n -> n != 0)
       .count();
+    if (elementCount > 0) {
+        PQ pqHeap = new PQHeap(elementCount);
 
-    PQ pqHeap = new PQHeap(elementCount);
+        // Fill the heap with elementCount number of elements with
+        // the frequency as the element key and a childless node with the value
+        // of the character as the node key as the data.
+        IntStream.range(0, table.length)
+                .filter(n -> table[n] != 0)
+                .forEach(n -> pqHeap.insert(new Element(table[n], tree.new Node(n))));
 
-    // Fill the heap with elementCount number of elements with
-    // the frequency as the element key and a childless node with the value
-    // of the character as the node key as the data.
-    IntStream.range(0, table.length)
-      .filter(n -> table[n] != 0)
-      .forEach(n -> pqHeap.insert(new Element(table[n], tree.new Node(n))));
+        for (i = 0; i < elementCount - 1; i++) {
+            Element left, right;
+            int key;
 
-    for (i = 0; i < elementCount-1; i++) {
-      Element left, right;
-      int key;
+            DictBinTree.Node node = tree.new Node(i);
 
-      DictBinTree.Node node = tree.new Node(i);
+            left = pqHeap.extractMin();
+            right = pqHeap.extractMin();
 
-      left = pqHeap.extractMin();
-      right = pqHeap.extractMin();
+            node.left = (DictBinTree.Node) left.data;
+            node.right = (DictBinTree.Node) right.data;
 
-      node.left = (DictBinTree.Node) left.data;
-      node.right = (DictBinTree.Node) right.data;
+            key = left.key + right.key;
 
-      key = left.key + right.key;
+            node.key = key;
 
-      node.key = key;
+            pqHeap.insert(new Element(key, node));
+        }
 
-      pqHeap.insert(new Element(key, node));
+        return pqHeap.extractMin();
     }
-    return pqHeap.extractMin();
+    return null;
   }
 
   /**

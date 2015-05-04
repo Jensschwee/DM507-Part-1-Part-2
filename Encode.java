@@ -26,31 +26,34 @@ public class Encode {
       }      
     }
 
-    Element e = Huffman.build(frequencies);
-    encodedTable = Huffman.encode((DictBinTree.Node) e.data);
-
-    in.close();
-
-    // 2. passthrough - write code to file
-    inFile = new FileInputStream(args[0]);
-    in = new BitInputStream(inFile);
-    
-    for(int i : frequencies) {
-      out.writeInt(i);
-    }
-
-    while ((bit = in.readBit()) != -1) {
-      bytelist += "" + bit;
-      if (bytelist.length() % 8 == 0) {
-        for (char c : encodedTable[Integer.parseInt(bytelist, 2)].toCharArray()) {
-          out.writeBit(Integer.parseInt(Character.toString(c)));
-        }
-        bytelist = "";
+      for (int i : frequencies) {
+          out.writeInt(i);
       }
-    }
 
-    in.close();
-    out.close();
+    Element e = Huffman.build(frequencies);
+      if(e != null) {
+          encodedTable = Huffman.encode((DictBinTree.Node) e.data);
+
+          in.close();
+
+          // 2. passthrough - write code to file
+          inFile = new FileInputStream(args[0]);
+          in = new BitInputStream(inFile);
+
+
+
+          while ((bit = in.readBit()) != -1) {
+              bytelist += "" + bit;
+              if (bytelist.length() % 8 == 0) {
+                  for (char c : encodedTable[Integer.parseInt(bytelist, 2)].toCharArray()) {
+                      out.writeBit(Integer.parseInt(Character.toString(c)));
+                  }
+                  bytelist = "";
+              }
+          }
+          in.close();
+          out.close();
+      }
 
   }
 
