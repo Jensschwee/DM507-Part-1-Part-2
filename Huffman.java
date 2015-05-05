@@ -9,8 +9,8 @@ public class Huffman {
     /**
      * Builds a new Huffman tree given a table of frequencies
      * <p>
-     * param table - an array of frequencies
-     * return - the root node of the Huffman tree
+     * @param table - an array of frequencies
+     * @return - the root node of the Huffman tree
      */
     public static Element build(int[] table) {
         int elementCount, i;
@@ -56,8 +56,8 @@ public class Huffman {
     /**
      * Uses Huffman coding to encode a Huffman tree
      * <p>
-     * param root - the rootnode of the Huffman tree
-     * return - a table of encoded values
+     * @param root - the rootnode of the Huffman tree
+     * @return - a table of encoded values
      */
     public static String[] encode(DictBinTree.Node root) {
         String[] table = new String[256];
@@ -67,8 +67,8 @@ public class Huffman {
 
     /**
      * Uses Huffman coding to decode a Huffman tree
-     * param root - the rootnode of the Huffman tree
-     * return - a HashMap of decode values
+     * @param root - the rootnode of the Huffman tree
+     * @return - a HashMap of decode values
      */
     public static Map<String, Integer> decode(DictBinTree.Node root) {
         Map<String, Integer> table = new HashMap<String, Integer>();
@@ -80,8 +80,8 @@ public class Huffman {
      * Recursively generates bitstrings based on a Huffman tree.
      *
      * @param node - current node that is being proccessed
-     *             param table - the table to insert strings into
-     *             param bitString - the string to insert into the table
+     * @param table - the Map to insert decodes into
+     * @param bitString - the string to insert into the table
      */
     private static void recursiveDecode(DictBinTree.Node node, Map<String, Integer> table, String bitString) {
         if (node == null) return;
@@ -96,9 +96,9 @@ public class Huffman {
     /**
      * Recursively generates bitstrings based on a Huffman tree.
      * <p>
-     * param node - current node that is being proccessed
-     * param table - the table to insert strings into
-     * param bitString - the string to insert into the table
+     * @param node - current node that is being proccessed
+     * @param table - the table to insert strings into
+     * @param bitString - the string to insert into the table
      */
     private static void recursiveEncode(DictBinTree.Node node, String[] table, String bitString) {
         if (node == null) return;
