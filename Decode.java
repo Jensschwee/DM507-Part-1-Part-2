@@ -33,7 +33,15 @@ public class Decode {
         readBits += "" + bit;
         Integer decode = decodeTable.get(readBits);
         if (decode != null) {
-          out.writeInt((int) decode);
+            String test = Integer.toBinaryString(decode);
+            for (int i = test.length() -8; i < 0; i++) {
+                out.writeBit(0);
+            }
+            for(char c : test.toCharArray())
+            {
+                out.writeBit(Integer.parseInt(Character.toString(c)));
+            }
+          //out.writeInt((int) decode);
           readBits = "";
           wirterCount--;
           if (wirterCount < 1)
