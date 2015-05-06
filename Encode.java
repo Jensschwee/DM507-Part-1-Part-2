@@ -35,7 +35,7 @@ public class Encode {
             Element e = Huffman.build(frequencies);
             encodedTable = Huffman.encode((DictBinTree.Node) e.data);
         } catch (NullPointerException ex) {
-            System.err.println("Error: Cannot encode an empty file.");
+            System.err.println("Warning: Input is empty.");
         }
 
         in.close();
@@ -47,12 +47,12 @@ public class Encode {
         // Read the input again by byte. Write chars from the encoded table
         // at the position of the byte to the output
         while ((bit = in.readBit()) != -1) {
-            bytelist += "" + bit;
-            if (bytelist.length() % 8 == 0) {
-                for (char c : encodedTable[Integer.parseInt(bytelist, 2)].toCharArray()) {
+            readBits += "" + bit;
+            if (readBits.length() % 8 == 0) {
+                for (char c : encodedTable[Integer.parseInt(readBits, 2)].toCharArray()) {
                     out.writeBit(Integer.parseInt(Character.toString(c)));
                 }
-                bytelist = "";
+                readBits = "";
             }
         }
 

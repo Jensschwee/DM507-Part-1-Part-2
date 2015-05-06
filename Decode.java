@@ -61,8 +61,8 @@ public class Decode {
                     if (writeCount < 1) break;
                 }
             }
-        } catch (NullPointerException e) {
-            System.err.println("A Huffman tree could not be built.");
+        } catch (NullPointerException ex) {
+            System.err.println("Warning: Empty encoding.");
         }
 
         in.close();
