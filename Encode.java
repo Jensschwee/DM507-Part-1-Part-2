@@ -15,17 +15,20 @@ public class Encode {
         // 1. passthrough - build huffman tree and encoding
         int bit;
         int[] frequencies = new int[256];
-        String bytelist = "";
+        String readBits = "";
         String[] encodedTable = null;
 
+        // Read the input file as bits; seperate at 8 bits (1 byte).
+        // Add one to the frequency of the byte on occurrence.
         while ((bit = in.readBit()) != -1) {
-            bytelist += "" + bit;
-            if (bytelist.length() % 8 == 0) {
-                frequencies[Integer.parseInt(bytelist, 2)] += 1;
-                bytelist = "";
+            readBits += "" + bit;
+            if (readBits.length() % 8 == 0) {
+                frequencies[Integer.parseInt(readBits, 2)] += 1;
+                readBits = "";
             }
         }
 
+        // Write all frequencies to the output
         for (int i : frequencies) out.writeInt(i);
 
         try {
@@ -41,7 +44,8 @@ public class Encode {
         inFile = new FileInputStream(args[0]);
         in = new BitInputStream(inFile);
 
-
+        // Read the input again by byte. Write chars from the encoded table
+        // at the position of the byte to the output
         while ((bit = in.readBit()) != -1) {
             bytelist += "" + bit;
             if (bytelist.length() % 8 == 0) {

@@ -9,60 +9,63 @@ public class Decode {
         FileInputStream inFile = new FileInputStream(args[0]);
         FileOutputStream outFile = new FileOutputStream(args[1]);
 
-        // Wrap the new bit streams around the input/output streams.
+        // Wrap the new bitstreams around the input/output streams.
         BitInputStream in = new BitInputStream(inFile);
         BitOutputStream out = new BitOutputStream(outFile);
 
-        //Reads all the frequencies from input file, and store it in a int array
+        // Reads all the frequencies from input file, and stores it in an int array
         int[] frequencies = new int[256];
         for (int i = 0; i < frequencies.length; i++) {
             frequencies[i] = in.readInt();
         }
 
-        //builds the huffman tree from the frequencies.
+        // Builds the huffman tree from the frequencies.
+        // If a huffman tree was built then e is the root of this tree
         Element e = Huffman.build(frequencies);
-        //if there was build a huffman tree from the frequencies table.
-        //e is the root of the tree
-        if (e != null) {
-            //Find the code for all input in the huffman tree
-            Map<String, Integer> decodeTable = Huffman.decode((DictBinTree.Node) e.data);
 
+        try {
+            // Find the code for all input in the huffman tree
+            Map<String, Integer> decodeTable = Huffman.decode((DictBinTree.Node) e.data);
 
             String readBits = "";
             int bit;
-            //Have manny character is there in the tree, and therefor have manny shall there be writen in the output file
+
+            // Have many character is there in the tree, 
+            // and therefor have manny shall there be writen in the output file
             int writeCount = e.key;
 
-            //reads the rest of the file, bit for bit.
+            // Reads the rest of the file, bit for bit.
             while ((bit = in.readBit()) != -1) {
-                //readBits contains the data there has been read but not yet writen to the output file
+
                 readBits += "" + bit;
-                //looks in the HashMap for where or not these bit's means something in this huffman tree
-                //if it do the decode contains the int there is to be writen in the output file
+                // Looks in the HashMap for whether or not these bits mean something in the huffman tree
+                // if it does, the decode contains the ints that are to be writen to the output file
                 Integer decode = decodeTable.get(readBits);
                 if (decode != null) {
-                    //finds the bit string for this int.
+                    // Finds the bitstring for this int.
                     String test = Integer.toBinaryString(decode);
 
-                    //if this bit string do not fill out a byte then add the rest of the byte in form of "0"'s
+                    // If this bit string do not fill out a byte then add the rest of the byte in form of "0"'s
                     for (int i = test.length() - 8; i < 0; i++) {
                         out.writeBit(0);
                     }
-                    //write the int in form of bits to the output file.
+                    // Writes the int in the form of bits to the output file.
                     for (char c : test.toCharArray()) {
                         out.writeBit(Integer.parseInt(Character.toString(c)));
                     }
-                    //clears the readBits so the next character can be decoded
+                    // Clears the readBits so the next character can be decoded
                     readBits = "";
                     writeCount--;
 
-                    //is there more character to be writen?
+                    // Are there more character to be written?
                     if (writeCount < 1) break;
                 }
             }
-
-            in.close();
-            out.close();
+        } catch (NullPointerException e) {
+            System.err.println("A Huffman tree could not be built.");
         }
+
+        in.close();
+        out.close();
     }
 }

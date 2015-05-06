@@ -8,7 +8,7 @@ public class Huffman {
 
     /**
      * Builds a new Huffman tree given a table of frequencies
-     * <p>
+     *
      * @param table - an array of frequencies
      * @return - the root node of the Huffman tree
      */
@@ -55,7 +55,7 @@ public class Huffman {
 
     /**
      * Uses Huffman coding to encode a Huffman tree
-     * <p>
+     *
      * @param root - the rootnode of the Huffman tree
      * @return - a table of encoded values
      */
@@ -95,7 +95,7 @@ public class Huffman {
 
     /**
      * Recursively generates bitstrings based on a Huffman tree.
-     * <p>
+     *
      * @param node - current node that is being proccessed
      * @param table - the table to insert strings into
      * @param bitString - the string to insert into the table
