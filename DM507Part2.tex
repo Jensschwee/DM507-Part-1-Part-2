@@ -79,7 +79,46 @@ Map<String, Integer> table, String bitString){
 		}
 }
 \end{lstlisting}
-Metoden decode, bruges til at få et HashMap med alle præfix koderne. Der er valgt at benytte et HashMap med en String som nøglen, da der værd gang der bliver læst en bit i file skal tejkes om dette er en præfix kode. Dette 
+Metoden decode, bruges til at få et HashMap med alle præfix koderne. Der er valgt at benytte et HashMap med en String som nøglen og integer som skal skrives som værdig, da der værd gang der bliver læst en bit i file skal tejkes hvorhvidt dette er en præfix kode. Herved opnås den bedste køretid for disse opslag.\\
+Kaldet til \texttt{recursiveDecode} fra \texttt{decode} , består af hvor den skal state med at lave koderne, som i dette tilfælde er rode noden, i hvad for et Map koderne skal indsættes og hvad præfix koden skal starte med.\\
+Metoden \texttt{recursiveDecode} er bygget op med rekusive kald, til sig selv. Hvis denne node ikke er null, og ikke har nogle børn, vides det at det er en node som indeholder en nøgle som er blevet kodet via huffman træet, derfor tilføjes til til mappet med tilhørende præfix kode. Hvis den der i mod har børn vides det at dette ikke er en af præfix koderne. Derfor kaldes \texttt{recursiveDecode}, med både højer og venster barn, og præfix koden ændres herefter.\\
+Når \texttt{recursiveDecode} er kørt færdig er alle noder blevet ramt og alle præfix koder er indsat i HashMap'et. Sluteligt retuneres det.
+\newpage
+\begin{lstlisting}
+//Decode.java
+FileInputStream inFile = new FileInputStream(args[0]);
+FileOutputStream outFile = new FileOutputStream(args[1]);
+
+BitInputStream in = new BitInputStream(inFile);
+BitOutputStream out = new BitOutputStream(outFile);
+...
+Map<String, Integer> decodeTable = Huffman.decode((DictBinTree.Node)e.data);
+String readBits = "";
+int bit;
+int writeCount = e.key;
+while ((bit = in.readBit()) != -1) {
+	readBits += "" + bit;
+	Integer decode = decodeTable.get(readBits);
+	if (decode != null) {
+		String test = Integer.toBinaryString(decode);
+		for (int i = test.length() - 8; i < 0; i++) 
+ 			out.writeBit(0);	
+ 			
+		for (char c : test.toCharArray())
+			out.writeBit(Integer.parseInt(Character.toString(c)));
+
+		readBits = "";
+		writeCount--;
+		if (writeCount < 1) 
+			break;
+	}
+}
+...
+\end{lstlisting}
+Efter at havde fået HashMappet med præfix koderne. \texttt{writeCount}  sættes til antalet af elementer der skal skrives til output filen, dette kommer fra huffman træes rods værdig.\\
+Programemt forsætter med at læse input filen, bit for bit. Hver gang der er læst en bit ligges det til \texttt{readBits} som indeholder alt hvad der er læst.
+Der søges i mappet om hvad der er læst er en præfix kode, hvis den ikke er så læs næste bit uden for foratage yderligere. Hvis vi derimod har fat i en præfix kode, så skal der skrives til output filen. \\
+For at få det rigtige skrævet i filen skal der sikkers at det som der skal skrives er 8 bit's, hvis det ikke er tilfældet skrives der nogle patting bits med "0" først, for herved at opnå det rigtige output. Når formatet er på plads skrives resten af de bits som repesetære den binære værdig af den integer som skal skrives. readBits bliver nulstillet og hvor mange elementer der skal skrives tælles ned. Hvis alle elementer er skrævet ud stoppes udskrivningen, herved fjernes evt. patten bits fra den endelige fil.
 \newpage
 \section*{Test}
 Begge programmer er testet på følgende måde:
@@ -87,13 +126,11 @@ Begge programmer er testet på følgende måde:
   \item Terminal med direkte input
   \item Terminal med redirection of input + output
 \end{itemize}
-
+\bigskip
 \subsection*{Encode test}
 Encode er testet med tomme indputs, og med file som indput.
 Herefter er det huffman træ der er blevet lavet, se i debuggeren, og tegnet i hånden, for at sikker korektheden heraf.\\
 \bigskip
-
-
 \subsection*{Decode test}
 Decode er test med tomme indput, og med indput hvor der står de 256 int's først i filen. \\
 Huffman træ'er der er blivet bygget er se i debugeren, og udarbejdet i hånden for at sikker korekthed heraf.\\
