@@ -1,5 +1,6 @@
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Map;
 
 public class Decode {
@@ -15,9 +16,15 @@ public class Decode {
 
         // Reads all the frequencies from input file, and stores it in an int array
         int[] frequencies = new int[256];
-        for (int i = 0; i < frequencies.length; i++) {
-            frequencies[i] = in.readInt();
+        try{
+            for (int i = 0; i < frequencies.length; i++) {
+                frequencies[i] = in.readInt();
+            }
+        } catch (IOException e)
+        {
+            System.err.println("This file has not the right number of ints in the start of the file");
         }
+
 
         // Builds the huffman tree from the frequencies.
         // If a huffman tree was built then e is the root of this tree
