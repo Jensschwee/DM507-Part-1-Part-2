@@ -58,11 +58,45 @@ Af Jesper Wohlert Hansen \& Jens Hjort Schwee\\
 \newpage
 
 \section*{Opgave 2}
+Formålet med denne delopgave er reetablering af filer der er blivet kompimeret via opgave's program \texttt{Encode}. Når \texttt{Decode} har kørt kommer der en file dekompimeret.\\
+Det første der sker i programemt er at der læses de 256 ints, som ligger først i filen, disse bliver brugt til at bygge huffman træet. Disse ints bliver gemt i et array og træet bygges via \texttt{Huffman.build}. For at kunne oversætte tilbage til udgangspunktet skal der vides hvilke præfix koder der er blevet brugt. Disse findes ved at kalde: \texttt{Huffman.decode(Node)}
+\begin{lstlisting}
+//Huffman.java
+public static Map<String, Integer> decode(DictBinTree.Node root) {
+	Map<String, Integer> table = new HashMap<String, Integer>();
+	recursiveDecode(root, table, "");
+	return table;
+}
 
+private static void recursiveDecode(DictBinTree.Node node, 
+Map<String, Integer> table, String bitString){
+	if (node == null) return;
+		if (node.left == null && node.right == null)
+			table.put(bitString, node.key);
+		else {
+            recursiveDecode(node.left, table, bitString + "0");
+            recursiveDecode(node.right, table, bitString + "1");
+		}
+}
+\end{lstlisting}
+Metoden decode, bruges til at få et HashMap med alle præfix koderne. Der er valgt at benytte et HashMap med en String som nøglen, da der værd gang der bliver læst en bit i file skal tejkes om dette er en præfix kode. Dette 
 \newpage
-
 \section*{Test}
+Begge programmer er testet på følgende måde:
+\begin{itemize}
+  \item Terminal med direkte input
+  \item Terminal med redirection of input + output
+\end{itemize}
 
-Grænsetilfælde testet.
+\subsection*{Encode test}
+Encode er testet med tomme indputs, og med file som indput.
+Herefter er det huffman træ der er blevet lavet, se i debuggeren, og tegnet i hånden, for at sikker korektheden heraf.\\
+\bigskip
+
+
+\subsection*{Decode test}
+Decode er test med tomme indput, og med indput hvor der står de 256 int's først i filen. \\
+Huffman træ'er der er blivet bygget er se i debugeren, og udarbejdet i hånden for at sikker korekthed heraf.\\
+Yderligere er der verifiseret indput og output ved at se på endelige filer som har været igemmen både Encode og Decode.
 
 \end{document}
