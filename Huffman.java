@@ -61,7 +61,9 @@ public class Huffman {
      */
     public static String[] encode(Element root) {
         String[] table = new String[256];
-        if(root.key != 1) {
+        DictBinTree.Node n  = (DictBinTree.Node)root.data;
+
+        if(n.right != null || n.left != null) {
             recursiveEncode((DictBinTree.Node)root.data, table, "");
         }
         else
@@ -76,7 +78,8 @@ public class Huffman {
      */
     public static Map<String, Integer> decode(Element root) {
         Map<String, Integer> table = new HashMap<String, Integer>();
-        if(root.key != 1) {
+        DictBinTree.Node n  = (DictBinTree.Node)root.data;
+        if(n.right != null || n.left != null) {
             recursiveDecode((DictBinTree.Node)root.data, table, "");
         }
         else
