@@ -66,7 +66,10 @@ public class Huffman {
      */
     public static String[] encode(DictBinTree.Node root) {
         String[] table = new String[256];
-        recursiveEncode(root, table, "");
+        if(root.right != null || root.left != null)
+            recursiveEncode(root, table, "");
+        else
+            recursiveEncode(root, table, "0");
         return table;
     }
 
@@ -78,7 +81,10 @@ public class Huffman {
      */
     public static Map<String, Integer> decode(DictBinTree.Node root) {
         Map<String, Integer> table = new HashMap<String, Integer>();
-        recursiveDecode(root, table, "");
+        if(root.right != null || root.left != null)
+            recursiveDecode(root, table, "");
+        else
+            recursiveDecode(root, table, "0");
         return table;
     }
 

@@ -33,7 +33,7 @@ public class Encode {
 
         try {
             Element e = Huffman.build(frequencies);
-            encodedTable = Huffman.encode((DictBinTree.Node) e.data);
+            encodedTable = Huffman.encode((DictBinTree.Node)e.data);
         } catch (NullPointerException ex) {
             System.err.println("Warning: Input is empty.");
         }

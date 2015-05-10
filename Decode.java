@@ -28,7 +28,7 @@ public class Decode {
 
         try {
             // Find the code for all input in the huffman tree
-            Map<String, Integer> decodeTable = Huffman.decode((DictBinTree.Node) e.data);
+            Map<String, Integer> decodeTable = Huffman.decode((DictBinTree.Node)e.data);
 
             String readBits = "";
             int bit;
