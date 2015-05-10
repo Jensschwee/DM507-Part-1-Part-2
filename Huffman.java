@@ -59,9 +59,13 @@ public class Huffman {
      * @param root - the rootnode of the Huffman tree
      * @return - a table of encoded values
      */
-    public static String[] encode(DictBinTree.Node root) {
+    public static String[] encode(Element root) {
         String[] table = new String[256];
-        recursiveEncode(root, table, "");
+        if(root.key != 1) {
+            recursiveEncode((DictBinTree.Node)root.data, table, "");
+        }
+        else
+            recursiveEncode((DictBinTree.Node)root.data, table, "0");
         return table;
     }
 
@@ -70,9 +74,13 @@ public class Huffman {
      * @param root - the rootnode of the Huffman tree
      * @return - a HashMap of decode values
      */
-    public static Map<String, Integer> decode(DictBinTree.Node root) {
+    public static Map<String, Integer> decode(Element root) {
         Map<String, Integer> table = new HashMap<String, Integer>();
-        recursiveDecode(root, table, "");
+        if(root.key != 1) {
+            recursiveDecode((DictBinTree.Node)root.data, table, "");
+        }
+        else
+            recursiveDecode((DictBinTree.Node)root.data, table, "0");
         return table;
     }
 
