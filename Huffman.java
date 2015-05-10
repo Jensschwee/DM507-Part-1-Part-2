@@ -4,6 +4,8 @@ import java.util.stream.*;
 
 public class Huffman {
 
+    // Because Node is an inner class of DictBinTree,
+    // we must initialise a new tree
     private static DictBinTree tree = new DictBinTree();
 
     /**
@@ -31,20 +33,23 @@ public class Huffman {
 
             for (i = 0; i < elementCount - 1; i++) {
                 Element left, right;
-                int key;
-
-                DictBinTree.Node node = tree.new Node(i);
+                int key;                
 
                 left = pqHeap.extractMin();
                 right = pqHeap.extractMin();
 
+                // Build a new node with the two smallest
+                // nodes as the children
+                DictBinTree.Node node = tree.new Node(i);
                 node.left = (DictBinTree.Node) left.data;
                 node.right = (DictBinTree.Node) right.data;
 
+                // Set the key of the new node as the sum of
+                // of the children's keys
                 key = left.key + right.key;
-
                 node.key = key;
 
+                // Insert the new node back into the heap
                 pqHeap.insert(new Element(key, node));
             }
 
@@ -67,6 +72,7 @@ public class Huffman {
 
     /**
      * Uses Huffman coding to decode a Huffman tree
+     *
      * @param root - the rootnode of the Huffman tree
      * @return - a HashMap of decode values
      */

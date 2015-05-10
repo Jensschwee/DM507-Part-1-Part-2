@@ -11,6 +11,7 @@
 \usepackage{fancyhdr}
 \usepackage{listings}
 \usepackage{color}
+\usepackage{parskip}% http://ctan.org/pkg/parskip
 
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
@@ -50,10 +51,99 @@ Af Jesper Wohlert Hansen \& Jens Hjort Schwee\\
 \newpage
 
 \section*{Introduktion}
+Denne rapport dækker over en implementation af Huffman kodning, herunder operationer til enkodning og dekodning af filer. Rapportens hovedafsnit beskriver disse operationer, mens at et sidste afsnit er tilset tests.
+
+\subsection*{Systemkrav \& kørsel}
+Bemærk, for at køre programmerne er \textbf{Java 8} påkrævet, da der i programmerne benyttes stream\footnote{https://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html} bibliotekets funktionalitet.
+
+\bigskip
+
+De to Java programmer, \texttt{Encode} og \texttt{Decode}. Køres således:
+
+\begin{verbatim}
+    java Encode <input> <encoding>
+\end{verbatim}
+
+\begin{verbatim}
+    java Decode <encoding> <output>
+\end{verbatim}
 
 \newpage
 
 \section*{Opgave 1}
+I denne opgave skal der konstrueres et program, som kan læse en input fil og producere et Huffman-kodet version af denne fil. For at gøre dette, laves der "gennemløb" af input-filen.
+
+\subsection*{Første gennemløb}
+
+Inputfilen indlæses og der bliver allokeret et nyt array til at indeholde frekvenserne for de 256 forskellige typer input som programmet godtager. Herefter læses filen linje for linje hvorved at der genereres bitstrenge af længde 8 (én byte). Denne byte kalder for \texttt{readBits} og vil typisk se således ud: \texttt{01001000}. \texttt{readBits} kan herefter parses til et heltal, som kan bruges som index i \texttt{frequencies} arrayet. Her lægges der 1 til frekvensen for at optælle frekvensen for hver byte, hvorefter alle frekvenserne skrives til output filen gennem \texttt{BitOutputStream}.
+
+Til sidst i gennemløbet bygges der et Huffman træ med frekvenserne som input. \texttt{build} operationen er dækket i følgende afsnit: % INDSÆT SENERE
+Roden af Huffman træet bliver returneret fra build, og denne rods data kan bruges til at lave Huffman koden.
+
+\begin{lstlisting}
+// Encode.java
+BitInputStream in = new BitInputStream(inFile);
+BitOutputStream out = new BitOutputStream(outFile);
+
+int bit;
+int[] frequencies = new int[256];
+String readBits = "";
+
+while ((bit = in.readBit()) != -1) {
+  readBits += "" + bit;
+  if (readBits.length() % 8 == 0) {
+    frequencies[Integer.parseInt(readBits, 2)] += 1;
+    readBits = "";
+  }
+}
+
+for (int i : frequencies) out.writeInt(i);
+
+Element e = Huffman.build(frequencies);
+encodedTable = Huffman.encode((DictBinTree.Node) e.data);
+\end{lstlisting}
+
+\newpage
+Huffman enkodningen laves i \texttt{huffman} klassen gennem metoden \texttt{encode}. Dette er en metode som kalder den rekursive version af sig selv indtil alle knuder er gennemløbet. Hertil skal bruges en tabel til at indeholde alle Huffman koderne, hvilket er repræsenteret ved \texttt{String} array, hvor indekset er nøglen for knuden (hyppigheden?). Den \texttt{recursiveEncode} konstruerer så en bitstreng rekursivt ved at lægge 0 til enden hvis den skal til venstre, og 1 til enden hvis den skal til højre. Den stopper gemmer bitstrengen i array'et når der ikke er flere børn.
+
+\begin{lstlisting}
+// Huffman.java
+
+public static String[] encode(DictBinTree.Node root) {
+  String[] table = new String[256];
+  recursiveEncode(root, table, "");
+  return table;
+}
+
+...
+
+private static void recursiveEncode(DictBinTree.Node node, String[] table, String bitString) {
+  if (node == null) return;
+  if (node.left == null && node.right == null) {
+    table[node.key] = bitString;
+  } else {
+    recursiveEncode(node.left, table, bitString + "0");
+    recursiveEncode(node.right, table, bitString + "1");
+  }
+}
+\end{lstlisting}
+
+\subsection*{Andet gennemløb}
+
+I andet gennemløb benyttes lignende kode fra første gennemløb til at genåbne inputfilen og læse byte'sne. Forskellen er, at der i dette gennemløb skrives huffmannkodningen for hver karakter til outputfilen ved opslag i den tabel der blev modtaget fra \texttt{Huffman.encode}.
+
+\begin{lstlisting}
+while ((bit = in.readBit()) != -1) {
+  readBits += "" + bit;
+  if (readBits.length() % 8 == 0) {
+    for (char c : encodedTable[Integer.parseInt(readBits, 2)].toCharArray()) {
+      out.writeBit(Integer.parseInt(Character.toString(c)));
+    }
+    readBits = "";
+  }
+}
+\end{lstlisting}
+
 
 \newpage
 
