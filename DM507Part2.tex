@@ -62,13 +62,12 @@ Formålet med denne delopgave er reetablering af filer der er blivet kompimeret 
 Det første der sker i programemt er at der læses de 256 ints, som ligger først i filen, disse bliver brugt til at bygge huffman træet. Disse ints bliver gemt i et array og træet bygges via \texttt{Huffman.build}. For at kunne oversætte tilbage til udgangspunktet skal der vides hvilke præfix koder der er blevet brugt. Disse findes ved at kalde: \texttt{Huffman.decode(Node)}
 \begin{lstlisting}
 //Huffman.java
-public static Map<String, Integer> decode(Element root) {
+public static Map<String, Integer> decode(DictBinTree.Node root) {
         Map<String, Integer> table = new HashMap<String, Integer>();
-        DictBinTree.Node n  = (DictBinTree.Node)root.data;
-        if(n.right != null || n.left != null)
-            recursiveDecode((DictBinTree.Node)root.data, table, "");
+        if(root.right != null || root.left != null)
+            recursiveDecode(root, table, "");
         else
-            recursiveDecode((DictBinTree.Node)root.data, table, "0");
+            recursiveDecode(root, table, "0");
         return table;
 }
 
@@ -97,7 +96,7 @@ FileOutputStream outFile = new FileOutputStream(args[1]);
 BitInputStream in = new BitInputStream(inFile);
 BitOutputStream out = new BitOutputStream(outFile);
 ...
-Map<String, Integer> decodeTable = Huffman.decode(e);
+Map<String, Integer> decodeTable = Huffman.decode((DictBinTree.Node)e.data);
 String readBits = "";
 int bit;
 int writeCount = e.key;
