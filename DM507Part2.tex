@@ -62,10 +62,14 @@ Formålet med denne delopgave er reetablering af filer der er blivet kompimeret 
 Det første der sker i programemt er at der læses de 256 ints, som ligger først i filen, disse bliver brugt til at bygge huffman træet. Disse ints bliver gemt i et array og træet bygges via \texttt{Huffman.build}. For at kunne oversætte tilbage til udgangspunktet skal der vides hvilke præfix koder der er blevet brugt. Disse findes ved at kalde: \texttt{Huffman.decode(Node)}
 \begin{lstlisting}
 //Huffman.java
-public static Map<String, Integer> decode(DictBinTree.Node root) {
-	Map<String, Integer> table = new HashMap<String, Integer>();
-	recursiveDecode(root, table, "");
-	return table;
+public static Map<String, Integer> decode(Element root) {
+        Map<String, Integer> table = new HashMap<String, Integer>();
+        DictBinTree.Node n  = (DictBinTree.Node)root.data;
+        if(n.right != null || n.left != null)
+            recursiveDecode((DictBinTree.Node)root.data, table, "");
+        else
+            recursiveDecode((DictBinTree.Node)root.data, table, "0");
+        return table;
 }
 
 private static void recursiveDecode(DictBinTree.Node node, 
@@ -80,6 +84,7 @@ Map<String, Integer> table, String bitString){
 }
 \end{lstlisting}
 Metoden decode, bruges til at få et HashMap med alle præfix koderne. Der er valgt at benytte et HashMap med en String som nøglen og integer som skal skrives som værdig, da der værd gang der bliver læst en bit i file skal tejkes hvorhvidt dette er en præfix kode. Herved opnås den bedste køretid for disse opslag.\\
+Før der kaldes \texttt{recursiveDecode}, sikkers der at der ikke kun er en \texttt{Node}, i træet, dette gøres for at koden også virker ved indput med kun et tegn.
 Kaldet til \texttt{recursiveDecode} fra \texttt{decode} , består af hvor den skal state med at lave koderne, som i dette tilfælde er rode noden, i hvad for et Map koderne skal indsættes og hvad præfix koden skal starte med.\\
 Metoden \texttt{recursiveDecode} er bygget op med rekusive kald, til sig selv. Hvis denne node ikke er null, og ikke har nogle børn, vides det at det er en node som indeholder en nøgle som er blevet kodet via huffman træet, derfor tilføjes til til mappet med tilhørende præfix kode. Hvis den der i mod har børn vides det at dette ikke er en af præfix koderne. Derfor kaldes \texttt{recursiveDecode}, med både højer og venster barn, og præfix koden ændres herefter.\\
 Når \texttt{recursiveDecode} er kørt færdig er alle noder blevet ramt og alle præfix koder er indsat i HashMap'et. Sluteligt retuneres det.
@@ -92,7 +97,7 @@ FileOutputStream outFile = new FileOutputStream(args[1]);
 BitInputStream in = new BitInputStream(inFile);
 BitOutputStream out = new BitOutputStream(outFile);
 ...
-Map<String, Integer> decodeTable = Huffman.decode((DictBinTree.Node)e.data);
+Map<String, Integer> decodeTable = Huffman.decode(e);
 String readBits = "";
 int bit;
 int writeCount = e.key;
