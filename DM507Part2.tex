@@ -111,7 +111,10 @@ Huffman enkodningen laves i \texttt{huffman} klassen gennem metoden \texttt{enco
 
 public static String[] encode(DictBinTree.Node root) {
   String[] table = new String[256];
-  recursiveEncode(root, table, "");
+  if(root.right != null || root.left != null)
+    recursiveEncode(root, table, "");
+  else
+    recursiveEncode(root, table, "0");
   return table;
 }
 
