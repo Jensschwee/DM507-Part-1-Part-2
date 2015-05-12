@@ -214,7 +214,6 @@ Før der kaldes \texttt{recursiveDecode}, sikkers der at der ikke kun er en \tex
 Kaldet til \texttt{recursiveDecode} fra \texttt{decode} , består af hvor den skal state med at lave koderne, som i dette tilfælde er rode noden, i hvad for et Map koderne skal indsættes og hvad præfix koden skal starte med.\\
 Metoden \texttt{recursiveDecode} er bygget op med rekusive kald, til sig selv. Hvis denne node ikke er null, og ikke har nogle børn, vides det at det er en node som indeholder en nøgle som er blevet kodet via huffman træet, derfor tilføjes til til mappet med tilhørende præfix kode. Hvis den der i mod har børn vides det at dette ikke er en af præfix koderne. Derfor kaldes \texttt{recursiveDecode}, med både højer og venster barn, og præfix koden ændres herefter.\\
 Når \texttt{recursiveDecode} er kørt færdig er alle noder blevet ramt og alle præfix koder er indsat i HashMap'et. Sluteligt retuneres det.
-\newpage
 \begin{lstlisting}
 //Decode.java
 FileInputStream inFile = new FileInputStream(args[0]);
