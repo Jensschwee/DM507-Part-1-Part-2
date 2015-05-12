@@ -15,9 +15,7 @@ public class Huffman {
      * @return - the root node of the Huffman tree
      */
     public static Element build(int[] table) {
-        int elementCount, i;
-
-        elementCount = (int) IntStream.of(table)
+        int elementCount = (int) IntStream.of(table)
                 .filter(n -> n != 0)
                 .count();
 
@@ -31,23 +29,18 @@ public class Huffman {
                     .filter(n -> table[n] != 0)
                     .forEach(n -> pqHeap.insert(new Element(table[n], tree.new Node(n))));
 
-            for (i = 0; i < elementCount - 1; i++) {
-                Element left, right;
-                int key;                
-
-                left = pqHeap.extractMin();
-                right = pqHeap.extractMin();
+            for (int i = 0; i < elementCount - 1; i++) {
+                Element left = pqHeap.extractMin();
+                Element right = pqHeap.extractMin();
+                int key = left.key + right.key;
 
                 // Build a new node with the two smallest
+                // The key of the Node  is the variable in the constructor
+                DictBinTree.Node node = tree.new Node(key);
+
                 // nodes as the children
-                DictBinTree.Node node = tree.new Node(i);
                 node.left = (DictBinTree.Node) left.data;
                 node.right = (DictBinTree.Node) right.data;
-
-                // Set the key of the new node as the sum of
-                // of the children's keys
-                key = left.key + right.key;
-                node.key = key;
 
                 // Insert the new node back into the heap
                 pqHeap.insert(new Element(key, node));

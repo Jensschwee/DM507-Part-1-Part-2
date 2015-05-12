@@ -104,11 +104,47 @@ encodedTable = Huffman.encode((DictBinTree.Node) e.data);
 \end{lstlisting}
 
 \newpage
+\subsection*{Huffman træet}
+Måden Huffman træet bygges på er ved at kalde metoden \texttt{Huffman.build(tabel)}, den kaldes med agumentet int array, som indefolder frekevenserne over de enkelte karatærer.\\
+Det første der sker i metoden tæller hvor mange elementer der ligger i array som indeholder nogle frekvenser. Dette gøres for at vide hvor stor det træ der skal bygges skal være.\\
+Alle de elementer der indeholder en værdig som ikke er 0, bliver indsat i en \texttt{PQHeap}.\\
+For loop'et bygger træet, først hentets de to mindste elementer i \texttt{pqHeap}. Deres key's læses og sættes som \\texttt{key} på en ny \texttt{Node}, hvor de første element der bliv hentet på heap'en sættes som venster barn og den anden som højre barn. Til sidst i loop'et indsættes det nye \texttt{Node} i heap'en. Når loop'et terminere hentes det sidste element i heap'en og retuneres.
+\begin{lstlisting}
+// Huffman.java
+public static Element build(int[] table) {
+	int elementCount = (int) IntStream.of(table)
+		.filter(n -> n != 0)
+		.count();
+		
+        if (elementCount > 0) {
+			PQ pqHeap = new PQHeap(elementCount);
+			IntStream.range(0, table.length)
+				.filter(n -> table[n] != 0)
+				.forEach(n -> pqHeap.insert(new
+					Element(table[n], tree.new Node(n))));
+					
+		for (int i = 0; i < elementCount - 1; i++) {
+			Element left = pqHeap.extractMin();
+			Element right = pqHeap.extractMin();
+			
+			int key = left.key + right.key;
+
+			DictBinTree.Node node = tree.new Node(key);
+			
+			node.left = (DictBinTree.Node) left.data;
+			node.right = (DictBinTree.Node) right.data;
+            
+			pqHeap.insert(new Element(key, node));
+		}
+		return pqHeap.extractMin();
+	}
+	return null;
+}
+\end{lstlisting}
 Huffman enkodningen laves i \texttt{huffman} klassen gennem metoden \texttt{encode}. Dette er en metode som kalder den rekursive version af sig selv indtil alle knuder er gennemløbet. Hertil skal bruges en tabel til at indeholde alle Huffman koderne, hvilket er repræsenteret ved \texttt{String} array, hvor indekset er nøglen for knuden (hyppigheden?). Den \texttt{recursiveEncode} konstruerer så en bitstreng rekursivt ved at lægge 0 til enden hvis den skal til venstre, og 1 til enden hvis den skal til højre. Den stopper gemmer bitstrengen i array'et når der ikke er flere børn.
 
 \begin{lstlisting}
 // Huffman.java
-
 public static String[] encode(DictBinTree.Node root) {
   String[] table = new String[256];
   if(root.right != null || root.left != null)
@@ -117,7 +153,6 @@ public static String[] encode(DictBinTree.Node root) {
     recursiveEncode(root, table, "0");
   return table;
 }
-
 ...
 
 private static void recursiveEncode(DictBinTree.Node node, String[] table, String bitString) {
@@ -139,9 +174,8 @@ I andet gennemløb benyttes lignende kode fra første gennemløb til at genåbne
 while ((bit = in.readBit()) != -1) {
   readBits += "" + bit;
   if (readBits.length() % 8 == 0) {
-    for (char c : encodedTable[Integer.parseInt(readBits, 2)].toCharArray()) {
+    for (char c : encodedTable[Integer.parseInt(readBits, 2)].toCharArray())
       out.writeBit(Integer.parseInt(Character.toString(c)));
-    }
     readBits = "";
   }
 }
