@@ -19,7 +19,7 @@ public class Decode {
         try {
             for (int i = 0; i < frequencies.length; i++) frequencies[i] = in.readInt();
         } catch (IOException e) {
-            System.err.println("Warning: This file has not the right number of ints in the start of the file");
+            System.err.println("Warning: Input does not contain frequencies.");
         }
 
         // Builds the huffman tree from the frequencies.
@@ -33,7 +33,7 @@ public class Decode {
             String readBits = "";
             int bit;
 
-            // Have many character is there in the tree, 
+            // Have many character is there in the tree,
             // and therefor have manny shall there be writen in the output file
             int writeCount = e.key;
 
@@ -46,14 +46,14 @@ public class Decode {
                 Integer decode = decodeTable.get(readBits);
                 if (decode != null) {
                     // Finds the bitstring for this int.
-                    String test = Integer.toBinaryString(decode);
+                    String bitstring = Integer.toBinaryString(decode);
 
                     // If this bit string do not fill out a byte then add the rest of the byte in form of "0"'s
-                    for (int i = test.length() - 8; i < 0; i++) {
+                    for (int i = bitstring.length() - 8; i < 0; i++) {
                         out.writeBit(0);
                     }
                     // Writes the int in the form of bits to the output file.
-                    for (char c : test.toCharArray()) {
+                    for (char c : bitstring.toCharArray()) {
                         out.writeBit(Integer.parseInt(Character.toString(c)));
                     }
                     // Clears the readBits so the next character can be decoded

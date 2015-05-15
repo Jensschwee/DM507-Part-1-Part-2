@@ -71,11 +71,11 @@ De to Java programmer, \texttt{Encode} og \texttt{Decode}. Køres således:
 \newpage
 
 \section*{Opgave 1}
-I denne opgave skal der konstrueres et program, som kan læse en input fil og producere et Huffman-kodet version af denne fil. For at gøre dette, laves der to "gennemløb" af input-filen.
+I denne opgave skal der konstrueres et program, som kan læse en input fil og producere et Huffman-kodet version af denne fil. For at gøre dette, laves der to gennemløb af input-filen.
 
 \subsection*{Første gennemløb}
 
-Inputfilen indlæses og der bliver allokeret et nyt array til at indeholde frekvenserne for de 256 forskellige karakterer som programmet godtager. Herefter læses filen bit for bit hvorved at der genereres bitstrenge af længde 8 (én byte). Denne byte kaldes for \texttt{readBits} og vil typisk se således ud: \texttt{01001000}. \texttt{readBits} kan herefter parses til et heltal, som kan bruges som index i \texttt{frequencies} arrayet. Her lægges der 1 til frekvensen for at optælle frekvensen for hver byte, hvorefter alle frekvenserne skrives til output filen gennem \texttt{BitOutputStream}.
+Inputfilen indlæses og der bliver allokeret et nyt array til at indeholde frekvenserne for de 256 forskellige karakterer som programmet godtager. Herefter læses filen bit for bit hvorved at der genereres bitstrenge af længde 8 (én byte). Denne byte kaldes for \texttt{readBits} og vil eksempelvis se således ud: \texttt{01001000}. \texttt{readBits} kan herefter parses til et heltal, som kan bruges som index i \texttt{frequencies} arrayet. Her lægges der 1 til frekvensen for at optælle frekvensen for hver byte, hvorefter alle frekvenserne skrives til output filen gennem \texttt{BitOutputStream}.
 
 Til sidst i gennemløbet bygges der et Huffman træ med frekvenserne som input. \texttt{build} operationen er afdækket i det efterkommende afsnit (Huffman træet).
 Returværdien fra \texttt{build} bruges til at lave Huffman kodningerne.
@@ -106,11 +106,11 @@ encodedTable = Huffman.encode((DictBinTree.Node) e.data);
 
 \newpage
 \subsubsection*{Huffman træet}
-Huffman træeerne bygges gennem metoden \texttt{Huffman.build}, som modtager et array med hyppigheder over det forskellige input.
+Huffman træeerne bygges gennem metoden \texttt{Huffman.build}, som modtager et array med hyppigheder over de forskellige input.
 
-Inde i metoden udregnes der hvor mange forskellige karakterer, som optræder. Dette gemmes som \texttt{elementCount}, således vides der hvor mange blade, Huffman træet skal bestå af. Der indsættes elementer i en prioritetskø, disse elementer har en nøgle som er lig hyppigheden, og en værdi som er lig bladet. Bladende er repræsenteret ved \texttt{Node} fra del 1.
+Inde i metoden udregnes der hvor mange forskellige karakterer som optræder. Dette gemmes som \texttt{elementCount}, således vides der hvor mange blade, Huffman træet skal bestå af. Der indsættes elementer i en prioritetskø, disse elementer har en nøgle som er lig hyppigheden, og en værdi som er lig bladet. Bladende er repræsenteret ved \texttt{Node} fra del 1.
 
-Til at begynde med fyldes køen med elementer med hyppighed og \texttt{Node} objekter der indeholder karakterkoden. Herefter gennemgås køen ved at fjerne de to elementer med lavest hyppighed. Der laves en ny knude med disse to elementer som børn, dennes nøgle er summen af børnenes nøgler. Til sidst indsættes den nye knude som element i prioritetskøen. Når alle elementer er gennemgået vil det mindste element i køen indeholde roden for Huffmantræet.
+Til at begynde med fyldes køen med elementer af typen \texttt{Element} med hyppighed som nøgle og værdien er en \texttt{Node} objekt der indeholder karakterkoden. Herefter gennemgås køen ved at fjerne de to elementer med lavest hyppighed. Der laves en ny knude med disse to elementer som børn, dennes nøgle er summen af børnenes nøgler. Til sidst indsættes den nye knude som element i prioritetskøen. Når alle elementer er gennemgået vil det mindste element i køen indeholde roden for Huffmantræet.
 \begin{lstlisting}
 // Huffman.java
 public static Element build(int[] table) {
@@ -142,7 +142,7 @@ public static Element build(int[] table) {
   return null;
 }
 \end{lstlisting}
-Huffman kodningen laves i \texttt{Huffman} klassen gennem metoden \texttt{encode}. Dette er en metode som kalder den rekursive version af sig selv indtil alle knuder er gennemløbet. Hertil skal bruges en tabel til at indeholde alle præfiks, hvilket er repræsenteret ved \texttt{String} array som til start er tomt. Indekset i denne tabel er nøglen for knuden, altså karakteren. \texttt{recursiveEncode} konstruerer så en bitstreng rekursivt ved at lægge 0 til enden hvis den skal til venstre, eller 1 hvis den skal til højre. Når den ikke kan komme længere gemmes bitstrengen i tabellen.
+Huffman kodningen laves i \texttt{Huffman} klassen gennem metoden \texttt{encode}. Dette er en metode som kalder den rekursive version af sig selv indtil alle knuder er gennemløbet. Hertil skal bruges en tabel til at indeholde alle præfikskoder, hvilket er repræsenteret ved et \texttt{String} array som til start er tomt. Indekset i denne tabel er nøglen for knuden, altså karakteren. \texttt{recursiveEncode} konstruerer så en bitstreng rekursivt ved at lægge 0 til enden hvis den skal til venstre, eller 1 hvis den skal til højre. Når den ikke kan komme længere gemmes bitstrengen i tabellen.
 
 \begin{lstlisting}
 // Huffman.java
@@ -184,7 +184,7 @@ while ((bit = in.readBit()) != -1) {
 Dette resulterer i en output fil som indeholder 256 ints, der repræsenterer hyppigheden for hver byte, samt huffmankodningen til slut i filen.
 
 \section*{Opgave 2}
-Formålet med denne delopgave er at reetablere det originale indhold, altså dekomprimering, af en Huffman enkodet fil. Dette er gjort igennem programmet \texttt{Decode}.
+Formålet med denne delopgave er at reetablere det originale indhold, altså dekomprimering, af en Huffmankodet fil. Dette er gjort igennem programmet \texttt{Decode}.
 
 \begin{lstlisting}
 //Huffman.java
@@ -213,7 +213,7 @@ Det første der sker i programmet er at der læses de 256 integers (hyppigheder)
 For at kunne oversætte tilbage til udgangspunktet skal der vides hvilke præfikskoder der er blevet brugt. Disse findes ved at kalde: \texttt{Huffman.decode(Node)}
 
 Metoden \texttt{decode} bruges til at få et HashMap med alle præfikskoderne. Der er valgt at benytte et HashMap med en \texttt{String} som nøglen og \texttt{Integer} som værdi, da der hver gang der bliver læst en bit i filen skal tjekkes hvorhvidt dette er en præfikskode.
-Før der kaldes \texttt{recursiveDecode}, sikrers der at der ikke kun er en enkelt knude i træet. Dette gøres for at koden også virker ved input med kun et tegn.
+Før der kaldes \texttt{recursiveDecode}, sikrers der at der ikke kun er en enkelt knude i træet. Dette gøres for at koden også virker ved input med kun ét tegn.
 
 Kaldet til \texttt{recursiveDecode} fra \texttt{decode}, består af følgende: 
 \begin{enumerate}
@@ -240,11 +240,11 @@ while ((bit = in.readBit()) != -1) {
   readBits += "" + bit;
   Integer decode = decodeTable.get(readBits);
   if (decode != null) {
-    String test = Integer.toBinaryString(decode);
-    for (int i = test.length() - 8; i < 0; i++) 
+    String bitstring = Integer.toBinaryString(decode);
+    for (int i = bitstring.length() - 8; i < 0; i++) 
       out.writeBit(0);	
 
-    for (char c : test.toCharArray())
+    for (char c : bitstring.toCharArray())
       out.writeBit(Integer.parseInt(Character.toString(c)));
 
     readBits = "";
